@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/davidson124/miEspacio_backend/issues"
   },
-  "homepage": "https://github.com/davidson124/miEspacio_backend#readme"
+  "homepage": "https://github.com/davidson124/miEspacio_backend#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
