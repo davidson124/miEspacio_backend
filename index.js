@@ -1,8 +1,8 @@
 const express = require ("express");
 
-const app=express();
+const app = express();
 const PORT=3000;
 
 app.listen(PORT, ()=>{
-    console.log(`Server running on https://localhost:${PORT}`)
+    console.log(`Server running on https://localhost:${PORT}`);
 });
