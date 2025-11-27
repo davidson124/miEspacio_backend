@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch index.js"
+    "dev": "node --watch ./src/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/davidson124/miEspacio_backend.git"
   },
   "author": "",
+  "contributors": ["Brayan David Rodriguez Parra",
+  "Kevin santiago Fenseca Velandia"],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/davidson124/miEspacio_backend/issues"
