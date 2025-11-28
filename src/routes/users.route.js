@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 // Definicion de rutas
 
-router.get('/',(req, res )=>{
+router.get('/users',(req, res )=>{
     const users = [
         { "name": "Ana", "age": 34},
         { "name": "David", "age": 39},
@@ -13,9 +13,19 @@ router.get('/',(req, res )=>{
     ]
     res.json(users);
 });
-// router.get('/health',(req, res )=>{
-//     res.send('<h1>health</h1>');
-// });
+router.post('/users',(req, res )=>{
+    res.json({msg: 'crear un objeto'});
+});
+router.put('/users',(req, res )=>{
+    res.json({msg: 'modificar un objeto'});
+});
+router.patch('/users',(req, res )=>{
+    res.json({msg: 'modificar parcialmente un objeto'});
+});
+router.delete('/users',(req, res )=>{
+    res.json({msg: 'eliminar un objeto'});
+});
+
 
 
 

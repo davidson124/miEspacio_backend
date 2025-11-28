@@ -11,14 +11,17 @@
     "url": "git+https://github.com/davidson124/miEspacio_backend.git"
   },
   "author": "",
-  "contributors": ["Brayan David Rodriguez Parra",
-  "Kevin santiago Fenseca Velandia"],
+  "contributors": [
+    "Brayan David Rodriguez Parra",
+    "Kevin santiago Fenseca Velandia"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/davidson124/miEspacio_backend/issues"
   },
   "homepage": "https://github.com/davidson124/miEspacio_backend#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongoose": "^9.0.0"
   }
 }
