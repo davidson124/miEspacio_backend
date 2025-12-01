@@ -7,7 +7,7 @@ const dbconection = async ()=>{
         await mongoose.connect(MONGO_URI, {});
         console.log('👌 Conección exitosa 👌');
     }catch(error){
-        console.error('⚠️ error al inicar la base de datos⚠️');
+        console.error('⚠️ error al inicar la base de datos ⚠️');
     };
 }
 export default dbconection;

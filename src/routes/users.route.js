@@ -14,17 +14,21 @@ router.get('/users',(req, res )=>{
     res.json(users);
 });
 router.post('/users',(req, res )=>{
-    res.json({msg: 'crear un objeto'});
+    const data = req.body;
+
+    res.json({msg: 'crear un objeto', data: data});
 });
-router.put('/users',(req, res )=>{
-    res.json({msg: 'modificar un objeto'});
-});
-router.patch('/users',(req, res )=>{
-    res.json({msg: 'modificar parcialmente un objeto'});
-});
-router.delete('/users',(req, res )=>{
-    res.json({msg: 'eliminar un objeto'});
-});
+
+
+// router.put('/users',(req, res )=>{
+//     res.json({msg: 'modificar un objeto'});
+// });
+// router.patch('/users',(req, res )=>{
+//     res.json({msg: 'modificar parcialmente un objeto'});
+// });
+// router.delete('/users',(req, res )=>{
+//     res.json({msg: 'eliminar un objeto'});
+// });
 
 
 
