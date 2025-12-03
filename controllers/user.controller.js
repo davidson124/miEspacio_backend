@@ -1,4 +1,4 @@
-import {     dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbregisterUser } from "../services/user.service.js";
+import {     dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
 import userModel from "../models/User.model.js";
 
 const createUser = async (req, res )=>{
@@ -65,8 +65,28 @@ const deleteUserById = async ( req, res )=>{
             })
     }
 }
+const upDateUserById = async (req, res) =>{
+    try{
+            const inputData =req.body;
+            const id = req.params.id;
+
+            const userUpDated = await dbupDateUserById();
+
+            // const userUpDated = await userModel.findOneAndUpdate({ _id, inputData});
+
+            res.json({
+                userUpDated
+            })
+    }catch(error){
+                res.json({
+                msg:'Error: el usuario no se ha podido modificar'
+            })
+    };          
+    
+}
 export { createUser, 
         getAllUsers,
         getUserById,
-        deleteUserById
+        deleteUserById,
+        upDateUserById
      };
