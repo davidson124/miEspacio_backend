@@ -1,4 +1,4 @@
-import {     dbGetAllUserById, dbGetAllUsers, dbregisterUser } from "../services/user.service.js";
+import {     dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbregisterUser } from "../services/user.service.js";
 import userModel from "../models/User.model.js";
 
 const createUser = async (req, res )=>{
@@ -48,11 +48,25 @@ const getUserById = async (req, res) =>{
             msg: 'Error: No s epudo obtener usuario'
          });
     }
-    
-    
 }
+const deleteUserById = async ( req, res )=>{
+    try{
+            const id = req.params.id;
+            const userDelete = await dbDeleteUserById(id);
 
+            res.json({
+                userDelete
+            })
+    }
+    catch(error){
+        console.error(error);
+        res.json({
+                msg:'Error: no se pudo eliminar usuario'
+            })
+    }
+}
 export { createUser, 
         getAllUsers,
-        getUserById
+        getUserById,
+        deleteUserById
      };
