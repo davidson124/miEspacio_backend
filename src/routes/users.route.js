@@ -16,15 +16,7 @@ router.get('/users',(req, res )=>{
 router.post('/users',(req, res )=>{
     res.json({msg: 'crear un objeto'});
 });
-router.put('/users',(req, res )=>{
-    res.json({msg: 'modificar un objeto'});
-});
-router.patch('/users',(req, res )=>{
-    res.json({msg: 'modificar parcialmente un objeto'});
-});
-router.delete('/users',(req, res )=>{
-    res.json({msg: 'eliminar un objeto'});
-});
+
 
 
 
