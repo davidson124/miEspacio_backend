@@ -7,8 +7,11 @@ const dbregisterUser = async ( newUser ) =>{
 const dbGetAllUsers = async (  ) =>{
      return await userModel.find(  );
 }
-
+const dbGetAllUserById = async ( _id )=>{
+     return await userModel.findOne( {_id} );
+}
 export {
     dbregisterUser,
-    dbGetAllUsers
+    dbGetAllUsers,
+    dbGetAllUserById
 }

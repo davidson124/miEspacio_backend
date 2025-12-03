@@ -1,4 +1,4 @@
-import {     dbGetAllUsers, dbregisterUser } from "../services/user.service.js";
+import {     dbGetAllUserById, dbGetAllUsers, dbregisterUser } from "../services/user.service.js";
 import userModel from "../models/User.model.js";
 
 const createUser = async (req, res )=>{
@@ -33,7 +33,26 @@ const getAllUsers = async (req, res) => {
     
 
 };
+const getUserById = async (req, res) =>{
+    try {
+        const id = req.params.id;
+
+        const user = await dbGetAllUserById(id);
+
+        res.json({
+            user
+         });
+    }
+    catch(error){
+        res.json({
+            msg: 'Error: No s epudo obtener usuario'
+         });
+    }
+    
+    
+}
 
 export { createUser, 
-        getAllUsers
+        getAllUsers,
+        getUserById
      };
