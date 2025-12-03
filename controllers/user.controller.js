@@ -1,13 +1,39 @@
-import { registerUser } from "../services/user.service.js";
-
+import {     dbGetAllUsers, dbregisterUser } from "../services/user.service.js";
+import userModel from "../models/User.model.js";
 
 const createUser = async (req, res )=>{
-    const data = req.body;
+    try{
+    
+        const data = req.body;
 
-    const dataRegistered = await registerUser( data ); //regitrar detos de la DB
+        const dataRegistered = await     dbregisterUser( data ); //regitrar detos de la DB
 
-    res.json({msg: 'crear un objeto', dataRegistered});
+        res.json({msg: 'crear un objeto', dataRegistered});
+    }
+    catch(error){
+        console.error(error);
+        res.json({
+            msg:'Error: No se puede crear el usuario'
+        });
+};
+}   
+const getAllUsers = async (req, res) => {
+    try{
+        const users = await dbGetAllUsers();
+        res.json({
+        msg:'Obteniendo usuario',users
+    });
+    }
+    catch(error){
+        res.json({
+        msg:'Error en la busqueda'
+    });
+    };
+
+    
+
 };
 
-
-export {createUser};
+export { createUser, 
+        getAllUsers
+     };
