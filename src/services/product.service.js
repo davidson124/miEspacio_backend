@@ -16,10 +16,22 @@ const dbDeleteProduct = async (_id)=>{
     return await ProductModel.findByIdAndDelete(_id)
 }
 
+const dbUpdateProduct = async(_id, inputData)=>{
+    return await ProductModel.findOneAndUpdate(
+            //Objeto de consulta debe tener ID
+            //Datos a actualizar
+            //Confirguracion
+            { _id},
+            inputData,
+            {new: true}
+        )
+}
+
 
 
 export {dbGetProducts,
         dbGetProductById,
         dbcreateProduct,
-        dbDeleteProduct
+        dbDeleteProduct,
+        dbUpdateProduct
 }

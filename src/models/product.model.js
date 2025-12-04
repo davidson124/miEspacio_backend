@@ -16,7 +16,8 @@ const ProductSchema = new Schema({
         default: 0
     }
 
-});
+},
+{timestamps: true});
 
 const ProductModel = model(
     "Products",             //APODO DE LA COLECCION
