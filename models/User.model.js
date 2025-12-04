@@ -2,25 +2,36 @@ import { Schema, model } from "mongoose";
 
 // Instanciar el esquema de la entidad User
 const userSchema = new Schema({
+        urlimage: {
+            type: String,
+            required: false,
+            unique:false
+        },
+        role: {
+            type: String,
+            uniqrequired: true,
+            enun: ['admin', 'user', 'registered'], 
+            default: 'registered'
+        },
         name: {
             type: String,
             required:true,
             trim: true,
         },
-        username: {
-            type:String,
-            required:true,
-            lowercase:true,
+        telephone: {
+            type: Number,
+            required:false,
             trim:true,
-            unique:true
+            unique:false,
+            minlength:6,
+            maxlength:12
         },
-        contrasenia: {
-            type: String,
-            required: true,
-            trim: true,
-            lowercase: true,
+        cellphoneNumber:{
+            type:Number,
+            required:true,
             unique:true,
-            minlength:9,
+            trim:true,
+            minlength:6,
             maxlength:12
         },
         email: {
@@ -30,26 +41,29 @@ const userSchema = new Schema({
             lowercase: true,
             unique: true
         },
-        role: {
+        password: {
             type: String,
-            uniqrequired: true,
-            enun: ['super-admin', 'admin', 'colaborador', 'registered'], 
-            default: 'registered'
+            required: true,
+            trim: true,
+            lowercase: true,
+            unique:true,
+            minlength:9,
+            maxlength:12
+        },
+        telephone: {
+            type: Number,
+            required:false,
+            trim:true,
+            unique:false
         },
         isActive: {
             type: Boolean,
             default: false
         }
-        // isVerified: { 
-        //     code: String,
-        //     trim:true
-        // }
-},{});
 
+},{});
 const userModel = model(
-    // nombre de la colección en singular-
-    //Esquema asociadp al modelo.
     'users',
-    userSchema
+     userSchema
 );
 export default userModel;

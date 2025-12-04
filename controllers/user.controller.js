@@ -1,19 +1,16 @@
 import {     dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
-import userModel from "../models/User.model.js";
+
 
 const createUser = async (req, res )=>{
     try{
-    
-        const data = req.body;
-
-        const dataRegistered = await     dbregisterUser( data ); //regitrar detos de la DB
-
-        res.json({msg: 'crear un objeto', dataRegistered});
+        const inputDataa = req.body;
+        const userRegistered = await dbregisterUser( inputDataa ); //regitrar detos de la DB
+        res.json({msg: '🆗 USUARIO CREADO CORRECTAMENTE 👌', userRegistered});
     }
     catch(error){
         console.error(error);
         res.json({
-            msg:'Error: No se puede crear el usuario'
+            msg:' ❌ ERROR: ❌ ⚠️ NO HEMOS PODIDO CREAR USUARIO ⚠️'
         });
 };
 }   
@@ -21,31 +18,27 @@ const getAllUsers = async (req, res) => {
     try{
         const users = await dbGetAllUsers();
         res.json({
-        msg:'Obteniendo usuario',users
+        msg:'🕑 BUSCANDO USUARIOS...',users
     });
     }
     catch(error){
         res.json({
-        msg:'Error en la busqueda'
+        msg:'⚠️ ⛔ ERROR EN LA BUSQUEDA, INTENTA NUEVAMENTE ⛔ ⚠️'
     });
     };
-
-    
-
 };
 const getUserById = async (req, res) =>{
     try {
         const id = req.params.id;
 
-        const user = await dbGetAllUserById(id);
-
+        const userFound = await dbGetAllUserById(id);
         res.json({
-            user
-         });
+            msg:'🕑 BUSCANDO USUARIO...',userFound
+        });
     }
     catch(error){
         res.json({
-            msg: 'Error: No s epudo obtener usuario'
+            msg:'⚠️ ⛔ USUARIO NO ENCINTRADO ⛔ ⚠️'
          });
     }
 }
@@ -53,15 +46,14 @@ const deleteUserById = async ( req, res )=>{
     try{
             const id = req.params.id;
             const userDelete = await dbDeleteUserById(id);
-
             res.json({
-                userDelete
+                msg:' ✂️ USUARIO ELIMINADO ✂️ ',userDelete 
             })
-    }
+        }
     catch(error){
         console.error(error);
         res.json({
-                msg:'Error: no se pudo eliminar usuario'
+                msg:'⚠️ NO SE HA PODIDO BOORAR EL USUARIO ⚠️'
             })
     }
 }
@@ -69,20 +61,17 @@ const upDateUserById = async (req, res) =>{
     try{
             const inputData =req.body;
             const id = req.params.id;
-
-            const userUpDated = await dbupDateUserById();
-
+            const userUpDated = await dbupDateUserById(id, inputData);
             // const userUpDated = await userModel.findOneAndUpdate({ _id, inputData});
-
             res.json({
-                userUpDated
+                msg:' ✅✅ LOS DATOS SE HAN MODIFICADO EXITOSAMENTE 👌👌 ',userUpDated
+
             })
     }catch(error){
                 res.json({
-                msg:'Error: el usuario no se ha podido modificar'
+                msg:'⚠️ NO SE HA PODIDO MODIFICAR LOS DATOS DEL USUARIO ⚠️'
             })
-    };          
-    
+    }; 
 }
 export { createUser, 
         getAllUsers,
