@@ -1,24 +1,14 @@
-// Importando la dependencia express usando commonJs
-import express from 'express';
-
-const router = express.Router();
-// Definicion de rutas
-
-router.get('/users',(req, res )=>{
-    const users = [
-        { "name": "Ana", "age": 34},
-        { "name": "David", "age": 39},
-        { "name": "Brayan", "age": 23},
-        { "name": "Camila", "age": 22},
-    ]
-    res.json(users);
-});
-router.post('/users',(req, res )=>{
-    res.json({msg: 'crear un objeto'});
-});
+import { Router } from 'express';
+import { createUser, deleteUserById, getAllUsers, getUserById, upDateUserById } from '../controllers/user.controller.js';
 
 
+const router = Router();
 
+router.post('/', createUser);
+router.get('/', getAllUsers );
+router.get('/:id', getUserById);
+router.delete('/:id', deleteUserById);
+router.patch('/:id', upDateUserById);
 
 
 export default router;

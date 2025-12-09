@@ -11,6 +11,7 @@ const app = express();
 const PORT=3000;
 dbconection();
 
+app.use(express.json());
 
 
 app.use(express.json());
