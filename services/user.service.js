@@ -15,10 +15,15 @@ const dbDeleteUserById = async ( _id ) =>{
 const dbupDateUserById = async ( _id, inputData ) =>{
      return await userModel.findByIdAndUpdate( { _id }, inputData, { new: true} );
 }
+const dbGetUserByEmail = async ( email )=>{
+     return await userModel.findOne( {email} );
+}
+
 export {
     dbregisterUser,
     dbGetAllUsers,
     dbGetAllUserById,
     dbDeleteUserById,
-    dbupDateUserById
+    dbupDateUserById,
+    dbGetUserByEmail
 }

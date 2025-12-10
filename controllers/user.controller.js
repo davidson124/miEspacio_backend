@@ -1,10 +1,21 @@
-import {     dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
+import { dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbGetUserByEmail, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
+import { encryptedPassword } from "../src/helpers/bcrypt.helpers.js";
 
 
 const createUser = async (req, res )=>{
     try{
-        const inputDataa = req.body;
-        const userRegistered = await dbregisterUser( inputDataa ); //regitrar detos de la DB
+        const inputData = req.body;
+
+        //verificar si el usuario existe
+        const userFound = await dbGetUserByEmail(inputData.email);
+        if (userFound){
+            return res.json({msg:' No se puede registrar'})
+        }
+        //Paso 2: Encriptar la contraseña
+        inputData.password = encryptedPassword ( inputData.password );
+
+
+        const userRegistered = await dbregisterUser( inputData ); //regitrar detos de la DB
         res.json({msg: '🆗 USUARIO CREADO CORRECTAMENTE 👌', userRegistered});
     }
     catch(error){
@@ -78,4 +89,5 @@ export { createUser,
         getUserById,
         deleteUserById,
         upDateUserById
+        
      };

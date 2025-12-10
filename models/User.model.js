@@ -48,13 +48,7 @@ const userSchema = new Schema({
             lowercase: true,
             unique:true,
             minlength:9,
-            maxlength:12
-        },
-        telephone: {
-            type: Number,
-            required:false,
-            trim:true,
-            unique:false
+            // // maxlength:12
         },
         isActive: {
             type: Boolean,
@@ -66,4 +60,4 @@ const userModel = model(
     'users',
      userSchema
 );
-export default userModel;
+export default userModel;
