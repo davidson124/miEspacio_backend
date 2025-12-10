@@ -1,5 +1,6 @@
+import { encryptedPassword } from "../helpers/bcrypt.helpers.js";
 import { dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbGetUserByEmail, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
-import { encryptedPassword } from "../src/helpers/bcrypt.helpers.js";
+
 
 
 const createUser = async (req, res )=>{
