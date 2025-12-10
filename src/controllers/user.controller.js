@@ -74,6 +74,8 @@ const upDateUserById = async (req, res) =>{
             const inputData =req.body;
             const id = req.params.id;
             const userUpDated = await dbupDateUserById(id, inputData);
+
+            
             // const userUpDated = await userModel.findOneAndUpdate({ _id, inputData});
             res.json({
                 msg:' ✅✅ LOS DATOS SE HAN MODIFICADO EXITOSAMENTE 👌👌 ',userUpDated

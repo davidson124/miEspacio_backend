@@ -15,8 +15,11 @@ const encryptedPassword =(passwordUser)=>{
 }
 
 // verificar contraseña
-const verifyEncriptedPassword =()=>{
-    
+const verifyEncriptedPassword = (originalPassword, hashPassword) => {
+    return bcrypt.compareSync(
+        originalPassword,
+        hashPassword
+    );
 }
 
 
