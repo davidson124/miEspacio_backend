@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 
 //encriptar contraseña
 const encryptedPassword =(passwordUser)=>{
-    const salt = bcrypt.genSaltSync(); //Generar una cadena aleatoria
+    const salt = bcrypt.genSaltSync(3); //Generar una cadena aleatoria
 
     console.log(salt);
 
