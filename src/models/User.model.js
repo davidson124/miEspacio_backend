@@ -23,16 +23,16 @@ const userSchema = new Schema({
         required: false,
         trim: true,
         unique: false,
-        minlength: 6,
-        maxlength: 12
+        minLength: 6,
+        maxLength: 12
     },
     cellphoneNumber: {
         type: Number,
         required: true,
         unique: true,
         trim: true,
-        minlength: 6,
-        maxlength: 12
+        minLength: 6,
+        maxLength: 12
     },
     email: {
         type: String,
@@ -46,11 +46,11 @@ const userSchema = new Schema({
         required: true,
         trim: true,
         unique: true,
-        minlength: 9,
+        minLength: 9,
     },
     isActive: {
         type: Boolean,
-        default: false
+        default: true
     }
 
 }, {});

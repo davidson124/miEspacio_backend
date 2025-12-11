@@ -12,8 +12,18 @@ const generateToken =( payload )=>{
 
     return token;
 }
+const verifyToken = ( token )=>{
+    return jwt.verify(
+        token, //token valido
+        'pepe3000', //semilla (palabra secreta)
+
+    )
+}
+
+
 
 
 export{
-    generateToken
+    generateToken,
+    verifyToken
 }
