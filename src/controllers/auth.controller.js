@@ -2,20 +2,20 @@ import { verifyEncriptedPassword } from "../helpers/bcrypt.helpers.js";
 import { generateToken } from "../helpers/jwt.heper.js";
 import { dbGetUserByEmail } from "../services/user.service.js";
 
-const loginUser = async (req, res)=> {
+const loginUser = async (req, res) => {
     const inputData = req.body;
 
     //paso 1: Verificar si el usuario no existe
     const userFound = await dbGetUserByEmail(inputData.email);
-    if (!userFound){
-        return res.json({msg:' ⛔ Usuario no existe, por favor haga su registro 🌐'})
+    if (!userFound) {
+        return res.json({ msg: ' ⛔ Usuario no existe, por favor haga su registro 🌐' })
     }
-    
+
     //Paso 2: Verificar si la contraseña coincide 
     const ismatch = verifyEncriptedPassword(inputData.password, userFound.password);
 
-    if(!ismatch){
-        return res.json({msg:'Contraseña invalida'});
+    if (!ismatch) {
+        return res.json({ msg: 'Contraseña invalida' });
     }
 
     //Paso 3: Generar credencial digital (token)
@@ -31,18 +31,18 @@ const loginUser = async (req, res)=> {
     delete jsonUserFound.password;
 
     //paso 5: Respondder al cliente
-    res.json({token, user:jsonUserFound });
+    res.json({ token, user: jsonUserFound });
 
 }
- const reVewToken = ( req, res )=>{
+const reNewToken = (req, res) => {
     //extraer payLoad del objeto requests que se asigno desde el middleware authenticación
-        const payLoad  = req.payload;
-        res.json({payLoad});
+    const payLoad = req.payload;
+    res.json({ payLoad });
 
-    }
+}
 
 
 export {
     loginUser,
-    reVewToken
+    reNewToken
 }
