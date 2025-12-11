@@ -1,4 +1,5 @@
 import { verifyEncriptedPassword } from "../helpers/bcrypt.helpers.js";
+import { generateToken } from "../helpers/jwt.heper.js";
 import { dbGetUserByEmail } from "../services/user.service.js";
 
 const loginUser = async (req, res)=> {
@@ -16,13 +17,19 @@ const loginUser = async (req, res)=> {
     }
 
     //Paso 3: Generar credencial digital (token)
+    const payload = {
+        name: userFound.name, //Hola cliente
+        email: userFound.email, // correo para realizar comunicaciones anénimas
+        role: userFound.role // Permisos según rol
+    };
 
-
+    const token = generateToken(payload)
     //paso 4: Eliminar propiedades sensibles
-
+    const jsonUserFound = userFound.toObject(); //toObject= convierte Bjson a Json
+    delete jsonUserFound.password;
 
     //paso 5: Respondder al cliente
-    res.json({msg:'usuario logeado'})
+    res.json({token, user:jsonUserFound });
 }
 
 
