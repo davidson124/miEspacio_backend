@@ -13,11 +13,11 @@ const userSchema = new Schema({
             enun: ['admin', 'user', 'registered'], 
             default: 'registered'
         },
-        name: {
-            type: String,
-            required:true,
-            trim: true,
-        },
+            name: {
+                type: String,
+                required:true,
+                trim: true,
+            },  
         telephone: {
             type: Number,
             required:false,

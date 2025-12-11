@@ -3,13 +3,13 @@ import dbconection from './config/mongo.config.js';
 import userRoutes from './routes/users.route.js';
 import productRoutes from './routes/products.route.js';
 import healthRoutes from './routes/health.route.js';
-import authRouther from './routes/auth.route.js'
+import authRouter  from './routes/auth.route.js'
 
 const app = express();
 const PORT=3000;
 dbconection();
 
-
+app.use('/api/v1/auth.route.js', authRouter);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/health', healthRoutes);
 app.use('/api/v1/products', productRoutes);
