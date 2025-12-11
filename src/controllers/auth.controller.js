@@ -7,14 +7,14 @@ const loginUser = async (req, res)=> {
 
     //paso 1: Verificar si el usuario no existe
     const userFound = await dbGetUserByEmail(inputData.email);
-    if (!userFound){
+    if ( ! userFound){
         return res.json({msg:' ⛔ Usuario no existe, por favor haga su registro 🌐'})
     }
     
-    //Paso 2: Verificar si la contraseña coincide 
+    //Paso 2: Verificar si la contraseña cohincide 
     const ismatch = verifyEncriptedPassword(inputData.password, userFound.password);
 
-    if(!ismatch){
+    if( ! ismatch){
         return res.json({msg:'Contraseña invalida'});
     }
 
@@ -25,7 +25,8 @@ const loginUser = async (req, res)=> {
         role: userFound.role // Permisos según rol
     };
 
-    const token = generateToken(payload)
+    const token = generateToken( payload );
+
     //paso 4: Eliminar propiedades sensibles
     const jsonUserFound = userFound.toObject(); //toObject= convierte Bjson a Json
     delete jsonUserFound.password;
@@ -34,12 +35,12 @@ const loginUser = async (req, res)=> {
     res.json({token, user:jsonUserFound });
 
 }
- const reVewToken = ( req, res )=>{
+const reVewToken = ( req, res )=>{
     //extraer payLoad del objeto requests que se asigno desde el middleware authenticación
         const payLoad  = req.payload;
         res.json({payLoad});
 
-    }
+}
 
 
 export {
