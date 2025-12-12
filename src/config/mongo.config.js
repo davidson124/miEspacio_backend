@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const MONGO_URI = 'mongodb://localhost:27017/MiEspacio';
+const MONGO_URI = process.env.DB_URI || 'mongodb://localhost:27017/MiEspacio-default';
 
 const dbconection = async ()=>{
     try{

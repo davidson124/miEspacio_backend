@@ -1,14 +1,16 @@
 import { Router } from 'express';
 import { createUser, deleteUserById, getAllUsers, getUserById, upDateUserById } from '../controllers/user.controller.js';
+import authenticationUser from '../middlewares/authentication.middleware.js';
+import authorizationUser from '../middlewares/authorization.middleware.js';
 
 
 const router = Router();
 
-router.post('/', createUser);
-router.get('/', getAllUsers );
+router.post('/', [authenticationUser,authorizationUser], createUser);
+router.get('/', [authenticationUser,authorizationUser],getAllUsers );
 router.get('/:id', getUserById);
-router.delete('/:id', deleteUserById);
-router.patch('/:id', upDateUserById);
+router.delete('/:id', [authenticationUser,authorizationUser], deleteUserById);
+router.patch('/:id',[authenticationUser,authorizationUser], upDateUserById);
 
 
 export default router;

@@ -9,7 +9,7 @@ const userSchema = new Schema({
         },
         role: {
             type: String,
-            uniqrequired: true,
+            required: true,
             enun: ['admin', 'user', 'registered'], 
             default: 'registered'
         },
@@ -23,16 +23,16 @@ const userSchema = new Schema({
             required:false,
             trim:true,
             unique:false,
-            minlength:6,
-            maxlength:12
+            minLength:6,
+            maxLength:12
         },
         cellphoneNumber:{
             type:Number,
             required:true,
             unique:true,
             trim:true,
-            minlength:6,
-            maxlength:12
+            minLength:6,
+            maxLength:12
         },
         email: {
             type: String,
@@ -45,16 +45,8 @@ const userSchema = new Schema({
             type: String,
             required: true,
             trim: true,
-            lowercase: true,
             unique:true,
-            minlength:9,
-            maxlength:12
-        },
-        telephone: {
-            type: Number,
-            required:false,
-            trim:true,
-            unique:false
+            minLength:9
         },
         isActive: {
             type: Boolean,
@@ -64,6 +56,6 @@ const userSchema = new Schema({
 },{});
 const userModel = model(
     'users',
-     userSchema
+    userSchema
 );
 export default userModel;

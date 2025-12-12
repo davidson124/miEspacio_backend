@@ -1,11 +1,36 @@
-import {     dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
+import { encryptedPassword } from "../helpers/bcrypt.helper.js";
+import { dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbGetUserByEmail, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
 
 
 const createUser = async (req, res )=>{
+    return res.json({ msg:'hola'})
+
     try{
-        const inputDataa = req.body;
-        const userRegistered = await dbregisterUser( inputDataa ); //regitrar detos de la DB
-        res.json({msg: '🆗 USUARIO CREADO CORRECTAMENTE 👌', userRegistered});
+        const inputData = req.body;
+        
+        // Paso 1: Verificar si el usuario existe
+        //const userFound = await dbGetUserByEmail(inputData.email);
+
+        if( userFound ){
+            return res.json({ msg: `No se puede registrar. El usuario ya existe`})
+        }
+
+        
+        //Paso 2: Encriptar la contraseña que envio el usuario
+        inputData.password = await encryptedPassword(inputData.password); // Devuelve el password encriptado
+
+        //Paso 3: Registrar el usuario
+        const userRegistered = await dbregisterUser( inputData ); //registrar datos de la DB
+
+        //Paso 4: Borrar informacion sensible
+
+        const jsonUserRegistered = userRegistered.toObject();
+
+        delete jsonUserRegistered.password;
+
+        //Paso 5: Mostrar Informacion
+
+        res.json({msg: '🆗 USUARIO CREADO CORRECTAMENTE 👌', jsonUserRegistered});
     }
     catch(error){
         console.error(error);
@@ -78,4 +103,4 @@ export { createUser,
         getUserById,
         deleteUserById,
         upDateUserById
-     };
+    };
