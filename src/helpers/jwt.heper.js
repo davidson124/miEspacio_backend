@@ -5,7 +5,7 @@ const generateToken =( payload )=>{
     const token =  jwt.sign(
         payload, //carga util
 
-        'pepe3000', //semilla (palabra secreta)
+        process.env.JWT_SEED, //semilla (palabra secreta)
 
         { expiresIn: '1h' } //Opciones de configuracióm
     )
@@ -15,7 +15,7 @@ const generateToken =( payload )=>{
 const verifyToken = ( token )=>{
     return jwt.verify(
         token, //token valido
-        'pepe3000', //semilla (palabra secreta)
+        process.env.JWT_SEED, //semilla (palabra secreta)
 
     )
 }

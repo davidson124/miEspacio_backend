@@ -6,7 +6,7 @@ import healthRoutes from './routes/health.route.js';
 import authRouther from './routes/auth.route.js'
 
 const app = express();
-const PORT=3000;
+const PORT=process.env.PORT;
 dbconection();
 
 app.use(express.json());
