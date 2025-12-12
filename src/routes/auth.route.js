@@ -9,7 +9,7 @@ import authorizactionUser from '../middlewares/autorization.middleware.js';
 const router = Router();
 
 router.post('/login', loginUser);
-router.post('/register', createUser);
+router.post('/register', createUser);// sólo registra y no necesita 
 router.get('/renew-token', authUser, authorizactionUser, reNewToken);
 
 
