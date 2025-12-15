@@ -139,3 +139,10 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Temporary Quotation files
+
+quotation.model.js
+quotation.service.js
+quotation.controller.js
+quotation.route.js
