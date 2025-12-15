@@ -1,4 +1,4 @@
-import { Schema, model, now } from "mongoose"
+import { Schema, model } from "mongoose"
 
 const projectSchema = new Schema({
     image: {
@@ -23,9 +23,7 @@ const projectSchema = new Schema({
         enum: ['Pending', 'In Progress', "Completed"],
         default: "Pending"
     },
-    description: {
-        type: String,
-    },
+    description: String,
     progress: {
         type: Number,
         default: 0
@@ -35,7 +33,6 @@ const projectSchema = new Schema({
         required: true,
         default: 0,
         min: 0
-
     },
     startDate: {
         type: Date,
@@ -46,12 +43,13 @@ const projectSchema = new Schema({
         required: true
     },
     workType:{
+        type: String,
         required: true,
         enum:['Residencial','Comercial','Interiores','Remodelación'],
         default: "Residencial"
     }
 },
-    { timestamps: true })
+    {timestamps:true})
 
 const projectModel = model('projects', projectSchema)
 

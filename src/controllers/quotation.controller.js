@@ -1,4 +1,4 @@
-import { dbCreateQuote, dbDeleteQuote, dbGetAllQuotes, dbGetQuoteById, dbUpdateQuote } from "../services/quotation.service"
+import { dbCreateQuote, dbDeleteQuote, dbGetAllQuotes, dbGetQuoteById, dbUpdateQuote } from "../services/quotation.service.js"
 
 
 const getAllQuotes = async (req,res)=>{

@@ -21,6 +21,7 @@ const quotationSchema= new Schema({
         required: true
     },
     attachedDocs:{
+        type: String,
         required: false
     }
 })
