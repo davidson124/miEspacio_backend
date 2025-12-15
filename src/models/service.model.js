@@ -22,6 +22,12 @@ const serviceSchema= new Schema({
         type:Number,
         required:true,
         default:0
+    },
+    serviceType:{
+        type: String,
+        enum:["Diseño Arquitectonico", "Remodelacion", "Diseño de Interiores", "Gestion de Proyectos", "Consultoria"],
+        default: "Selecciona un servicio",
+        required: true
     }
 },{timestamps:true})
 

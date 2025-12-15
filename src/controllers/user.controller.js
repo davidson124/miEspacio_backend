@@ -25,6 +25,7 @@ const createUser = async (req, res )=>{
         //Paso 4: Borrar informacion sensible
 
         const jsonUserRegistered = userRegistered.toObject();
+        //Transforma un BSON en un JSON para eliminar campos sensibles
 
         delete jsonUserRegistered.password;
 
@@ -38,7 +39,7 @@ const createUser = async (req, res )=>{
             msg:' ❌ ERROR: ❌ ⚠️ NO HEMOS PODIDO CREAR USUARIO ⚠️'
         });
 };
-}   
+}; 
 const getAllUsers = async (req, res) => {
     try{
         const users = await dbGetAllUsers();
@@ -66,7 +67,7 @@ const getUserById = async (req, res) =>{
             msg:'⚠️ ⛔ USUARIO NO ENCINTRADO ⛔ ⚠️'
          });
     }
-}
+};
 const deleteUserById = async ( req, res )=>{
     try{
             const id = req.params.id;
@@ -81,7 +82,7 @@ const deleteUserById = async ( req, res )=>{
                 msg:'⚠️ NO SE HA PODIDO BOORAR EL USUARIO ⚠️'
             })
     }
-}
+};
 const upDateUserById = async (req, res) =>{
     try{
             const inputData =req.body;
@@ -97,7 +98,8 @@ const upDateUserById = async (req, res) =>{
                 msg:'⚠️ NO SE HA PODIDO MODIFICAR LOS DATOS DEL USUARIO ⚠️'
             })
     }; 
-}
+};
+
 export { createUser, 
         getAllUsers,
         getUserById,

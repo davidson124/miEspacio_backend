@@ -9,6 +9,14 @@ const projectSchema = new Schema({
         type: String,
         required: true
     },
+    city:{
+        type: String,
+        required: true
+    },
+    area:{
+        type: Number,
+        required: false
+    },
     state: {
         type: String,
         required: true,
@@ -36,6 +44,11 @@ const projectSchema = new Schema({
     endDate: {
         type: Date,
         required: true
+    },
+    workType:{
+        required: true,
+        enum:['Residencial','Comercial','Interiores','Remodelación'],
+        default: "Residencial"
     }
 },
     { timestamps: true })

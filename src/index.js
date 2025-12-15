@@ -7,6 +7,7 @@ import productRoutes from './routes/products.route.js';
 import serviceRoutes from './routes/services.routes.js';
 import projectRoutes from './routes/projects.routes.js';
 import authRoute from "./routes/auth.route.js";
+import quotationRoute from "./routes/quotation.route.js"
 
 const app = express();
 const PORT= process.env.PORT || 3000;
@@ -16,6 +17,7 @@ dbconection();
 app.use(express.json());
 
 
+app.use('/api/v1/quotation', quotationRoute)
 app.use('/api/v1/auth', authRoute) ;        //Login/Register/Renew Token
 app.use('/api/v1/users', userRoutes);       // CRUD (Users): Autenticado
 // app.use('/api/v1/health', healthRoutes);
