@@ -3,13 +3,12 @@ import { dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbGetUserByEmail, db
 
 
 const createUser = async (req, res )=>{
-    return res.json({ msg:'hola'})
 
     try{
         const inputData = req.body;
         
         // Paso 1: Verificar si el usuario existe
-        //const userFound = await dbGetUserByEmail(inputData.email);
+        const userFound = await dbGetUserByEmail(inputData.email);
 
         if( userFound ){
             return res.json({ msg: `No se puede registrar. El usuario ya existe`})

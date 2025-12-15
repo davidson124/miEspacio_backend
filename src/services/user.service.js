@@ -16,7 +16,7 @@ const dbDeleteUserById = async ( _id ) =>{
      return await userModel.findOneAndDelete( { _id } );
 }
 const dbupDateUserById = async ( _id, inputData ) =>{
-     return await userModel.findByIdAndUpdate( { _id }, inputData, { new: true} );
+     return await userModel.findByIdAndUpdate( _id, inputData, { new: true} );
 }
 export {
      dbregisterUser,

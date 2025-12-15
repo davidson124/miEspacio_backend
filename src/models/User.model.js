@@ -46,8 +46,7 @@ const userSchema = new Schema({
             required: true,
             trim: true,
             unique:true,
-            minLength:9,
-            maxLength:60
+            minLength:9
         },
         isActive: {
             type: Boolean,
