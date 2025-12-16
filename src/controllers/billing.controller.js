@@ -1,5 +1,5 @@
 import billingModel from '../models/Billing.model.js';
-import { dbBillingRegistered, dbgetAllBilling, dbgetBillingById } from '../services/billing.service.js'
+import { dbBillingRegistered, dbDeletebillingById, dbgetAllBilling, dbgetBillingById, dbUpDatebillingById } from '../services/billing.service.js'
 
 
 const createBilling = async (req, res)=>{
@@ -29,12 +29,31 @@ const getBillingById = async ( req, res ) => {
          res.json({
             msg:'⚠️ ⛔ USUARIO NO ENCINTRADO ⛔ ⚠️'
          });
+    };
+}
+const deletebillingById = async ( req, res )=>{
+    try{
+        const id = req.paramas.id;
+        const deleteBilling = await dbDeletebillingById(id);
+        res.json({msg:'La factura se eliminó exitosamente'});
+    }catch(error){
+        res.json({msg:'No se pudo eliminar la factura'});
     }
-     
-
+}
+const upDatebillingById = async ( req, res )=>{
+    try{
+        const imputData = req.body;
+        const id = req.paramas.id;
+        const updateBilling = await dbUpDatebillingById(id);
+        res.json({msg:'Cabiamos los datos de la factura exitosamente'});
+    }catch(error){
+        res.json({msg:'No se pudo modificar datos de la factura '});
+    }
 }
 export {
     createBilling,
     getAllBilling,
-    getBillingById
+    getBillingById,
+    deletebillingById,
+    upDatebillingById
 }

@@ -23,7 +23,7 @@ const documentatiosShema = new Schema({
         unique:false
     },
     date:{
-        type:date,
+        type: Date,
         required:true,
         unique:false
     },
