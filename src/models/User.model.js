@@ -9,7 +9,8 @@ const userSchema = new Schema({
         },
         role: {
             type: String,
-            uniqrequired: true,
+            unique:true,
+            required: true,
             enun: ['admin', 'user', 'registered'], 
             default: 'registered'
         },

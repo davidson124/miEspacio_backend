@@ -32,14 +32,11 @@ const billingSchema = new Schema ({
         trim: true
     },
     isPaid:{
-        type: Boolean,
-        default: false
+        type: String,
+        enum: ["paid", "pending", "expire"],
+        default: "pending",
     },
-    isnotPaid:{
-        type: Boolean,
-        default: true
-    },
-    urlBillImg:{
+    urlImgBillImg:{
         type:String,
         required:true,  
     }
