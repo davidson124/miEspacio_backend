@@ -1,20 +1,23 @@
-import express from 'express';
+import express from "express";
 
-import dbconection from './config/mongo.config.js';
-import userRoutes from './routes/users.route.js';
-import productRoutes from './routes/products.route.js';
-import healthRoutes from './routes/health.route.js';
+
+import projectTypesRoute from "./routes/project-types.route.js";
+import { connect } from "./config/mongo.config.js";
+
 
 const app = express();
-const PORT=3000;
-dbconection();
+
+connect();
+
+app.use(express.json())
+
+app.use("/api/v1/project-types", projectTypesRoute)
 
 
-app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/health', healthRoutes);
-app.use('/api/v1/products', productRoutes);
+
+app.listen(3000, ()=>
+console.log("serve running")
+)
 
 
-app.listen(PORT, ()=>{
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+

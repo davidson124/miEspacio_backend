@@ -1,14 +1,13 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const MONGO_URI = 'mongodb://localhost:27017/bd-miEspacio';
 
-const dbconection = async ()=>{
+
+export async function connect() {
     try{
-        await mongoose.connect(MONGO_URI, {});
-        console.log('👌 Conección exitosa 👌');
-    }catch(error){
-        console.error('⚠️ error al inicar la base de datos⚠️');
-    };
+        await mongoose.connect("mongodb://localhost:27017/quotes")
+        console.log("connect db")
+    }
+    catch(err){
+        console.log(err);
+    }
 }
-export default dbconection;
-
