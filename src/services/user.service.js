@@ -1,4 +1,5 @@
 import userModel from '../models/User.model.js';
+
 // Se debe encargar sólo de la comunicación con la Db
 const dbregisterUser = async ( newUser ) =>{
      return await userModel.create( newUser );

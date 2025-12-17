@@ -3,6 +3,7 @@ import { dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbGetUserByEmail, db
 
 
 
+
 const createUser = async (req, res )=>{
     try{
         const inputData = req.body;
@@ -10,14 +11,20 @@ const createUser = async (req, res )=>{
         //verificar si el usuario existe
         const userFound = await dbGetUserByEmail(inputData.email);
         if (userFound){
-            return res.json({msg:' No se puede registrar'})
+            return res.json({msg:' Usuario existente, por favor loguearse'})
         }
         //Paso 2: Encriptar la contraseña
         inputData.password = encryptedPassword ( inputData.password );
 
-
+        //paso 3: Regitrar al usuario
         const userRegistered = await dbregisterUser( inputData ); //regitrar detos de la DB
         res.json({msg: '🆗 USUARIO CREADO CORRECTAMENTE 👌', userRegistered});
+        //paso4: Eliminar propiedades con datos sensibles.
+        const jsonUserFound = userRegistered.toObjet();
+        delete jsonUserFound.password;
+
+        //paso 5: responder al cliente
+        res.json({ user: jsonUserFound })
     }
     catch(error){
         console.error(error);
