@@ -33,7 +33,7 @@ const getBillingById = async ( req, res ) => {
 }
 const deletebillingById = async ( req, res )=>{
     try{
-        const id = req.paramas.id;
+        const id = req.params.id;
         const deleteBilling = await dbDeletebillingById(id);
         res.json({msg:'La factura se eliminó exitosamente'});
     }catch(error){
@@ -43,7 +43,7 @@ const deletebillingById = async ( req, res )=>{
 const upDatebillingById = async ( req, res )=>{
     try{
         const imputData = req.body;
-        const id = req.paramas.id;
+        const id = req.params.id;
         const updateBilling = await dbUpDatebillingById(id);
         res.json({msg:'Cabiamos los datos de la factura exitosamente'});
     }catch(error){

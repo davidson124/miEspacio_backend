@@ -14,7 +14,7 @@ const documentatiosShema = new Schema({
     check:{
         type: String,
         required:true,
-        enum:["aprovved", "disapproved"]
+        enum:["aproved", "disapproved"]
     },
     documentsType:{
         type: String,
@@ -27,11 +27,11 @@ const documentatiosShema = new Schema({
         required:true,
         unique:false
     },
-    description:{
-        type:Schema.Types.ObjectId,
-        ref: 'project_types',
-        required:trusted
-    },
+    // description:{
+    //     type:Schema.Types.ObjectId,
+    //     ref: 'project_types',
+    //     required:trusted
+    // },
     architectname:{
         type:String,
         required:true,
