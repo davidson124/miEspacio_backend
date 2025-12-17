@@ -4,6 +4,8 @@ import userRoutes from './routes/users.route.js';
 import productRoutes from './routes/products.route.js';
 import healthRoutes from './routes/health.route.js';
 import authRouther from './routes/auth.route.js'
+import billingRoutes from './routes/billing.route.js';
+
 
 const app = express();
 const PORT=process.env.PORT;
@@ -15,6 +17,7 @@ app.use('/api/v1/auth', authRouther);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/health', healthRoutes);
 app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/billing', billingRoutes);
 
 
 app.listen(PORT, ()=>{
