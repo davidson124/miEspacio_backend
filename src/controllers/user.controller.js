@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 import { encryptedPassword } from "../helpers/bcrypt.helpers.js";
 import { dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbGetUserByEmail, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
-=======
-import { dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
->>>>>>> feature/documentations
+
 
 
 
@@ -14,7 +11,7 @@ const createUser = async (req, res )=>{
         //verificar si el usuario existe
         const userFound = await dbGetUserByEmail(inputData.email);
         if (userFound){
-            return res.json({msg:' No se puede registrar'})
+            return res.json({msg:' Usuario existente, por favor loguearse'})
         }
         //Paso 2: Encriptar la contraseña
         inputData.password = encryptedPassword ( inputData.password );
