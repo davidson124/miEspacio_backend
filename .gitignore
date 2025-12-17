@@ -142,7 +142,7 @@ vite.config.ts.timestamp-*
 
 # Temporary Quotation files
 
-quotation.model.js
-quotation.service.js
-quotation.controller.js
-quotation.route.js
+/quotation.model.js
+/quotation.service.js
+/quotation.controller.js
+/quotation.route.js

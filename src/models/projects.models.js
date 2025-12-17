@@ -13,6 +13,10 @@ const projectSchema = new Schema({
         type: String,
         required: true
     },
+        projectAddress:{
+        type: String,
+        required: true
+    },
     area:{
         type: Number,
         required: false
@@ -42,11 +46,10 @@ const projectSchema = new Schema({
         type: Date,
         required: true
     },
-    workType:{
-        type: String,
+    description:{
+        type: Schema.Types.ObjectId,
+        ref: 'project_types',
         required: true,
-        enum:['Residencial','Comercial','Interiores','Remodelación'],
-        default: "Residencial"
     }
 },
     {timestamps:true})
