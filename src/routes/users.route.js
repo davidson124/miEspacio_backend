@@ -5,6 +5,7 @@ import authorizactionUser from '../middlewares/autorization.middleware.js';
 
 
 
+
 const router = Router();
 
 router.post('/', [authUser, authorizactionUser], createUser);

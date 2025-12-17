@@ -5,6 +5,7 @@ import productRoutes from './routes/products.route.js';
 import healthRoutes from './routes/health.route.js';
 import authRouther from './routes/auth.route.js'
 import billingRoutes from './routes/billing.route.js';
+import documentationsRoutes from './routes/documentations.route.js';
 
 
 const app = express();
@@ -16,8 +17,9 @@ app.use(express.json());
 app.use('/api/v1/auth', authRouther);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/health', healthRoutes);
-app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/billing', billingRoutes);
+app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/documentations', documentationsRoutes);
 
 
 app.listen(PORT, ()=>{

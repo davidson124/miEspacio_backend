@@ -9,8 +9,17 @@ const dbgetAllBilling = async ()=>{
 const dbgetBillingById = async ( _id )=>{
     return await billingModel.findById( _id );
 }
+const dbDeletebillingById = async (_id)=>{
+    return await billingModel.findOneAndDelete({_id});
+}
+const dbUpDatebillingById = async (_id)=>{
+    return await billingModel.findOneAndUpdate({_id})
+}
 export {
     dbBillingRegistered,
     dbgetAllBilling,
-    dbgetBillingById
+    dbgetBillingById,
+    dbDeletebillingById,
+    dbUpDatebillingById
+    
 }
