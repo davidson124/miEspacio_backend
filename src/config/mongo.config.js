@@ -11,4 +11,3 @@ const dbconection = async ()=>{
     };
 }
 export default dbconection;
-
