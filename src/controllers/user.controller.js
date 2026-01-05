@@ -1,30 +1,37 @@
-import { encryptedPassword } from "../helpers/bcrypt.helpers.js";
+import { encryptedPassword } from "../helpers/bcrypt.helper.js";
 import { dbDeleteUserById, dbGetAllUserById, dbGetAllUsers, dbGetUserByEmail, dbregisterUser, dbupDateUserById } from "../services/user.service.js";
 
 
 
-
 const createUser = async (req, res )=>{
+
     try{
         const inputData = req.body;
-
-        //verificar si el usuario existe
+        
+        // Paso 1: Verificar si el usuario existe
         const userFound = await dbGetUserByEmail(inputData.email);
-        if (userFound){
-            return res.json({msg:' Usuario existente, por favor loguearse'})
+
+        if( userFound ){
+            return res.json({ msg: `No se puede registrar. El usuario ya existe`})
         }
-        //Paso 2: Encriptar la contraseña
-        inputData.password = encryptedPassword ( inputData.password );
 
-        //paso 3: Regitrar al usuario
-        const userRegistered = await dbregisterUser( inputData ); //regitrar detos de la DB
-        res.json({msg: '🆗 USUARIO CREADO CORRECTAMENTE 👌', userRegistered});
-        //paso4: Eliminar propiedades con datos sensibles.
-        const jsonUserFound = userRegistered.toObjet();
-        delete jsonUserFound.password;
+        
+        //Paso 2: Encriptar la contraseña que envio el usuario
+        inputData.password = await encryptedPassword(inputData.password); // Devuelve el password encriptado
 
-        //paso 5: responder al cliente
-        res.json({ user: jsonUserFound })
+        //Paso 3: Registrar el usuario
+        const userRegistered = await dbregisterUser( inputData ); //registrar datos de la DB
+
+        //Paso 4: Borrar informacion sensible
+
+        const jsonUserRegistered = userRegistered.toObject();
+        //Transforma un BSON en un JSON para eliminar campos sensibles
+
+        delete jsonUserRegistered.password;
+
+        //Paso 5: Mostrar Informacion
+
+        res.json({msg: '🆗 USUARIO CREADO CORRECTAMENTE 👌', jsonUserRegistered});
     }
     catch(error){
         console.error(error);
@@ -32,7 +39,7 @@ const createUser = async (req, res )=>{
             msg:' ❌ ERROR: ❌ ⚠️ NO HEMOS PODIDO CREAR USUARIO ⚠️'
         });
 };
-}   
+}; 
 const getAllUsers = async (req, res) => {
     try{
         const users = await dbGetAllUsers();
@@ -58,9 +65,9 @@ const getUserById = async (req, res) =>{
     catch(error){
         res.json({
             msg:'⚠️ ⛔ USUARIO NO ENCINTRADO ⛔ ⚠️'
-         });
+        });
     }
-}
+};
 const deleteUserById = async ( req, res )=>{
     try{
             const id = req.params.id;
@@ -75,7 +82,7 @@ const deleteUserById = async ( req, res )=>{
                 msg:'⚠️ NO SE HA PODIDO BOORAR EL USUARIO ⚠️'
             })
     }
-}
+};
 const upDateUserById = async (req, res) =>{
     try{
             const inputData =req.body;
@@ -93,11 +100,12 @@ const upDateUserById = async (req, res) =>{
                 msg:'⚠️ NO SE HA PODIDO MODIFICAR LOS DATOS DEL USUARIO ⚠️'
             })
     }; 
-}
+};
+
 export { createUser, 
         getAllUsers,
         getUserById,
         deleteUserById,
         upDateUserById
-        
-     };
+    };
+

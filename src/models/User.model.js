@@ -64,4 +64,5 @@ const userModel = model(
     'users',
     userSchema
 )
+
 export default userModel;

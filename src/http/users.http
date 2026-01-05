@@ -1,0 +1,10 @@
+POST http://localhost:3000/api/v1/users HTTP/1.1
+content-type: application/json
+
+{
+    "role":"admin",
+    "name": "David",
+    "cellphoneNumber":3214567891,    
+    "email": "davidquintero@gmail.com",
+    "password": "32423tregr"
+}
