@@ -1,16 +1,20 @@
-import { Router } from 'express';
-
+import {Router} from  'express';
 import { createUser } from '../controllers/user.controller.js';
-import { loginUser, reNewToken } from '../controllers/auth.controller.js';
-
-import authUser from '../middlewares/autentication.middelware.js';
-import authorizactionUser from '../middlewares/autorization.middleware.js';
+import { loginUser, renewToken } from '../controllers/auth.controller.js';
+import authenticationUser from '../middlewares/authentication.middleware.js';
+import authorizationUser from '../middlewares/authorization.middleware.js';
+import withoutRole from '../middlewares/withoutRole.middleware.js';
 
 const router = Router();
 
-router.post('/login', loginUser);
-router.post('/register', createUser);// sólo registra y no necesita 
-router.get('/renew-token', authUser, authorizactionUser, reNewToken);
+//Rutas para autenticacion
 
+router.post('/login', loginUser)
+router.post('/register', withoutRole, createUser );           //Solo Registra usuario sin necesidad de autenticación
+router.get(
+    '/renew-token',
+    [authenticationUser,authorizationUser],
+    renewToken)
 
-export default router;
+export default router 
+
