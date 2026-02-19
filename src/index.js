@@ -1,24 +1,23 @@
 import express from 'express';
+import cors from 'cors';
+import 'dotenv/config';
 
 import dbconection from './config/mongo.config.js';
 import userRoutes from './routes/users.route.js';
 import billingRoutes from './routes/billing.route.js';
 import documentationsRoutes from './routes/documentations.route.js';
-import quotesRoutes from './routes/quote.route.js';
+import quotesRoutes from './routes/quote.route.js'; // ✅ SOLO ESTE
 import projectTypesRoutes from './routes/project-types.route.js';
 import serviceRoutes from './routes/services.routes.js';
 import projectRoutes from './routes/projects.routes.js';
 import authRoute from "./routes/auth.route.js";
 
-
 const app = express();
-const PORT= process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 dbconection();
-
-
+app.use(cors());
 app.use(express.json());
-
 
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/users', userRoutes);
@@ -27,10 +26,8 @@ app.use('/api/v1/documentations', documentationsRoutes);
 app.use('/api/v1/quotes', quotesRoutes);
 app.use('/api/v1/project-types', projectTypesRoutes);
 app.use('/api/v1/services', serviceRoutes);
-app.use('/api/v1/projects', projectRoutes)
+app.use('/api/v1/projects', projectRoutes);
 
-
-
-app.listen(PORT, ()=>{
-    console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });

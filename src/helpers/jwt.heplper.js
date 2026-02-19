@@ -1,34 +1,29 @@
 import jwt from 'jsonwebtoken';
 
-const generateToken = (payload) => {
-    try {
-        const token=jwt.sign(
-            payload,            //Carga Util
-            "pepe3000",         //Semilla(Palabra Secreta) ==> Salt
-            {expiresIn: '1h'}   //Opciones de configuracion del Token
-        )
-        return token
-        
-    } catch (error) {
-        console.error(error)
-    }
-    
+const generateToken =( payload )=>{
+
+    const token =  jwt.sign(
+        payload, //carga util
+
+        process.env.JWT_SEED, //semilla (palabra secreta)
+
+        { expiresIn: '1h' } //Opciones de configuracióm
+    )
+
+    return token;
+}
+const verifyToken = ( token )=>{
+    return jwt.verify(
+        token, //token valido
+        process.env.JWT_SEED, //semilla (palabra secreta)
+
+    )
 }
 
-const verifyToken=(token)=>{
-    try {
-        return jwt.verify(
-            token,          // Token Valido
-            process.env.JWT_SEED,     // Clave
-        )
-        
-    } catch (error) {
-        console.error(error)
-    }
 
-}
 
-export {
+
+export{
     generateToken,
     verifyToken
 }

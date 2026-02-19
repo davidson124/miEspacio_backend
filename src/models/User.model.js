@@ -10,8 +10,8 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        uniqrequired: true,
-        enun: ['admin', 'user', 'registered'],
+        required: true,
+        enum: ['admin', 'user', 'registered'],
         default: 'registered'
     },
     name: {
@@ -19,26 +19,22 @@ const userSchema = new Schema({
         required: true,
         trim: true,
     },
-    lastName:{
+    lastName: {
         type: String,
-        required:true,
-        trim:true,
+        required: false,
+        trim: true,
     },
     telephone: {
         type: Number,
         required: false,
         trim: true,
         unique: false,
-        minLength: 6,
-        maxLength: 12
     },
     cellphoneNumber: {
         type: Number,
-        required: true,
-        unique: true,
+        required: false,
+        unique: false,
         trim: true,
-        minLength: 6,
-        maxLength: 12
     },
     email: {
         type: String,
@@ -51,8 +47,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        unique: true,
-        minLength: 9,
+        minLength: 6,
     },
     isActive: {
         type: Boolean,
