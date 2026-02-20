@@ -1,43 +1,33 @@
 import { Schema, model } from "mongoose";
-
 // Instanciar el esquema de la entidad User
 const userSchema = new Schema({
-
     urlimage: {
-        type: String,
-        required: false,
-        unique: false
+        type: String
     },
     role: {
         type: String,
-        enun: ['admin', 'user', 'registered'],
-        default: 'registered'
+        enum: ['admin', 'architect', 'user'],
+        default: 'user'
     },
     name: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
     },
     lastName:{
         type: String,
         required:true,
-        trim:true,
+        trim:true
     },
     telephone: {
-        type: Number,
-        required: false,
-        trim: true,
-        unique: false,
-        minLength: 6,
-        maxLength: 12
+        type: String,
+        trim: true
     },
     cellphoneNumber: {
-        type: Number,
-        required: true,
+        type: String,
+        required:true,
         unique: true,
-        trim: true,
-        minLength: 6,
-        maxLength: 12
+        trim: true
     },
     email: {
         type: String,
@@ -49,19 +39,12 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-        trim: true,
-        unique: true,
-        minLength: 9,
+        minlength: 9,
+        select: false
     },
     isActive: {
         type: Boolean,
         default: true
     }
-
-}, {});
-const userModel = model(
-    'users',
-    userSchema
-)
-
-export default userModel;
+}, { timeseries: true });
+export default model('User', userSchema);
