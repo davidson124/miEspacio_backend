@@ -1,76 +1,56 @@
-
 import { verifyEncriptedPassword } from "../helpers/bcrypt.helper.js";
 import { generateToken } from "../helpers/jwt.heplper.js";
-import { dbGetUserByEmail } from "../services/user.service.js";
-
+import { dbGetUserByEmailWithPassword, dbGetUserById } from "../services/user.service.js";
 const loginUser= async (req,res)=>{
-    
-    const inputData=req.body;
-
-    //Paso 1: Verificar si el usuario no existe
-    const userFound = await dbGetUserByEmail(inputData.email);
-    if(!userFound){
-            return res.json({ msg: `Usuario no existente. Por favor haga su registro`})
+    try{
+        const { email, password } = req.body;
+        //Paso 1: Verificar si el usuario no existe
+        const userFound = await dbGetUserByEmailWithPassword(email);
+        if(!userFound){
+            return res.status(401).json({ message: 'Credenciales invalidas, intente nuevamente'});
+            }
+        // Verificar si el usuario esta activo
+        if(!userFound.isActive){
+            return res.status(401).json({ message: 'Usuario inactivo, por favor contacte al administrador'});
         }
-    //Paso 2: Verificar si la contraseña coincide 
-
-    const verifiedPassword=verifyEncriptedPassword(inputData.password, userFound.password)
-
-    if(!verifiedPassword){
-        return res.json({message: `Contraseña invalida, intente nuevamente`})
+        //Paso 2: Verificar si la contraseña coincide 
+        const isMatch = await verifyEncriptedPassword(password, userFound.password);
+        if(!isMatch){
+            return res.status(401).json({ message: 'Credenciales invalidas, intente nuevamente' });
+        }
+        //Paso 3: Generar credencial digital (token)
+        const token = generateToken({
+            id: userFound._id, 
+            role: userFound.role // Identificador Unico del Usuario, controlar quien hace que en la aplicacion
+        });
+        const userObject = userFound.toObject();
+        //Paso 4: Eliminar propiedades con datos sensibles 
+        delete userObject.password;
+        res.json({ user: userObject, token });
+    }catch(error){
+        res.status(500).json({ message: `Error interno del servidor`});
     }
-
-    //Paso 3: Generar credencial digital (token)
-    const payload = {
-        name: userFound.name,
-        email: userFound.email,
-        role: userFound.role
-    };
-
-    const tokenCreado = generateToken(payload)
-
-    //Paso 4: Eliminar propiedades con datos sensibles 
-    const jsonUserFound = userFound.toObject();
-    
-    delete jsonUserFound.password;
-
-    //Paso 5: Responder al cliente
-    res.json({user: jsonUserFound, token: tokenCreado});
-}
-
+};
 const renewToken = async (req, res) => {
-    const payload = req.payload;
-    
-    delete payload.iat;
-    delete payload.exp;
-
+    try{
+        const { id } = req.payload;
     //Paso 3: Verificar si el usuario sigue existiendo en la base de datos
-
-    const userFound = await dbGetUserByEmail( payload.email );
-
-    if(!userFound){
-        return res.json({ msg: `Usuario no existente. Por favor haga su registro`})
-}
-
+    const userFound = await dbGetUserById( id );
+    if(!userFound || !userFound.isActive){
+        return res.status(401).json({ message: 'token no válido'});
+    }
    // Paso 4: Generar un nuevo token
     const token = generateToken({
-        id: userFound._id,          // Identificador Unico del Usuario, controlar quien hace que en la aplicacion
-        name: userFound.name,       // Hola, Fulanito! 
-        email: userFound.email,     // Para realizar comunicaciones (anonimas)
-        role: userFound.role        // Para informar al frontend sobre la autorizacion que tienen los usuarios para acceder a las diferentes interfaces 
+        id: userFound._id,      
+        role: userFound.role      
     });
-
-    // Paso 5: Eliminar propiedades con datos sensibles
-    //         userFound es un BJSON (JSON Binario)
-    const jsonUserFound = userFound.toObject();     // Convertir un BJSON a JSON
-
-    delete jsonUserFound.password;      // Elimina la propiedad 'password' de un JSON
-
+    const userObject = userFound.toObject(); // Convertir un BJSON a JSON
+    // Paso 5: Eliminar propiedades con datos sensibles  
+    delete userObject.password; // Elimina la propiedad 'password' de un JSON
     // Paso 6: Responder al cliente
-    res.json({ token, user: jsonUserFound });
-}
-
-export {
-    loginUser,
-    renewToken
-}
+    res.json({ token, user: userObject });
+    }catch(error){
+        res.status(500).json({ message: `Error interno del servidor`});
+    }
+};
+export { loginUser, renewToken } 
