@@ -1,12 +1,8 @@
 import express from 'express';
-import cors from 'cors';
-import 'dotenv/config';
-
 import dbconection from './config/mongo.config.js';
 import userRoutes from './routes/users.route.js';
 import billingRoutes from './routes/billing.route.js';
 import documentationsRoutes from './routes/documentations.route.js';
-import quotesRoutes from './routes/quote.route.js'; // ✅ SOLO ESTE
 import projectTypesRoutes from './routes/project-types.route.js';
 import serviceRoutes from './routes/services.routes.js';
 import projectRoutes from './routes/projects.routes.js';

@@ -1,40 +1,33 @@
 import { Schema, model } from "mongoose";
-
 // Instanciar el esquema de la entidad User
 const userSchema = new Schema({
-
     urlimage: {
-        type: String,
-        required: false,
-        unique: false
+        type: String
     },
     role: {
         type: String,
-        required: true,
-        enum: ['admin', 'user', 'registered'],
-        default: 'registered'
+        enum: ['admin', 'architect', 'user'],
+        default: 'user'
     },
     name: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
     },
     lastName: {
         type: String,
-        required: false,
-        trim: true,
+        required:true,
+        trim:true
     },
     telephone: {
-        type: Number,
-        required: false,
-        trim: true,
-        unique: false,
+        type: String,
+        trim: true
     },
     cellphoneNumber: {
-        type: Number,
-        required: false,
-        unique: false,
-        trim: true,
+        type: String,
+        required:true,
+        unique: true,
+        trim: true
     },
     email: {
         type: String,
@@ -53,11 +46,5 @@ const userSchema = new Schema({
         type: Boolean,
         default: true
     }
-
-}, {});
-const userModel = model(
-    'users',
-    userSchema
-)
-
-export default userModel;
+}, { timestamps: true });
+export default model('User', userSchema);
