@@ -12,16 +12,13 @@ const dbCreateQuotes = async (newquotes) => {
 const dbpatchQuotes = async (newquotes, _id) =>{
     return await quotesModel.findByIdAndUpdate(_id, newquotes, {new:true})
 }
-const dbdeleteQuotes = async (_id) =>{
-    return await quotesModel.findOneAndDelete({_id})
-}
-
+const dbdeleteQuotes = async (id) => {
+  return await quotesModel.findByIdAndDelete(id);
+};
 
 export{
     dbGetAllQuotes,
     dbCreateQuotes,
     dbpatchQuotes,
     dbdeleteQuotes,
-    
-
 }

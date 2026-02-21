@@ -14,14 +14,12 @@ const quotesSchema = new Schema({
   },
   //id_proyecto
   project_id: {
-    type: Schema.Types.ObjectId,
-    ref: "projects",
+    type: String,
     required: false,
   },
   //tipo de proyecto
   project_type: {
-    type: Schema.Types.ObjectId,
-    ref: "project_types",
+    type: String,
     required: false,
   },
 });
