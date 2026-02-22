@@ -1,30 +1,19 @@
 import { verifyToken } from "../helpers/jwt.heplper.js";
-
-const authenticationUser = (req, res, next) =>{
-    try {    
-        //Paso 1: Obtener el string donde viene el Token
-        const token = req.header( 'X-Token' );
-    
-        //Paso 2: Verifica que la cadena no venga vacia
-        if(!token){
-            return res.json({msg:'Error: Cadena del token vacia'});
+const authenticationUser = (req, res, next) => {
+    try {
+        const authHeader = req.header("Authorization");
+        if (!authHeader) {
+            return res.status(401).json({ message: "Token requerido" });
         }
-    
-        //Paso 3: Verificar si el token es valido 
-    
+        if (!authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ message: "Formato de token inválido" });
+        }
+        const token = authHeader.split(" ")[1];
         const payload = verifyToken(token);
-
-        //Paso 4: Enviar a traves del request los datos del payload 
         req.payload = payload;
-
-        //Paso 5: Slatar a la siguiente funcion definida en la ruta
-    
         next();
-        
     } catch (error) {
-        console.error(error),
-        res.json({message: 'Token Invalido'})
+        return res.status(401).json({ message: "Token inválido" });
     }
 };
-
-export default authenticationUser
+export default authenticationUser;

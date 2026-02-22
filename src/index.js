@@ -12,6 +12,7 @@ import projectTypesRoutes from './routes/project-types.route.js';
 import serviceRoutes from './routes/services.routes.js';
 import projectRoutes from './routes/projects.routes.js';
 import authRoute from "./routes/auth.route.js";
+import quotesRoutes from './routes/quote.route.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -39,6 +40,8 @@ const starServer = async () => {
     process.exit(1);
   }
 };
+
+
 starServer();
 
 
