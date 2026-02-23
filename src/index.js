@@ -13,12 +13,12 @@ import serviceRoutes from './routes/services.routes.js';
 import projectRoutes from './routes/projects.routes.js';
 import authRoute from "./routes/auth.route.js";
 import quotesRoutes from './routes/quote.route.js';
+import errorHandler from './middlewares/error.middleware.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/billing', billingRoutes);
@@ -27,6 +27,7 @@ app.use('/api/v1/quotes', quotesRoutes);
 app.use('/api/v1/project-types', projectTypesRoutes);
 app.use('/api/v1/services', serviceRoutes);
 app.use('/api/v1/projects', projectRoutes);
+app.use(errorHandler);
 
 const starServer = async () => {
   try{
@@ -40,8 +41,6 @@ const starServer = async () => {
     process.exit(1);
   }
 };
-
-
 starServer();
 
 
