@@ -1,24 +1,14 @@
-import quotesModel from "../models/quotes.model.js";
+import Quote from "../models/quote.model.js";
 
-const dbGetAllQuotes = async () =>{
-    return await quotesModel.find();
-}
-
-const dbCreateQuotes = async (newquotes) => {
-    return await quotesModel.create(newquotes);
-        
-}
-
-const dbpatchQuotes = async (newquotes, _id) =>{
-    return await quotesModel.findByIdAndUpdate(_id, newquotes, {new:true})
-}
-const dbdeleteQuotes = async (id) => {
-  return await quotesModel.findByIdAndDelete(id);
+export const dbGetAllQuotes = async () =>{
+    return await Quote.find({ isDeleted: false }).sort({ createdAt: -1 });
 };
-
-export{
-    dbGetAllQuotes,
-    dbCreateQuotes,
-    dbpatchQuotes,
-    dbdeleteQuotes,
-}
+export const dbGetQuotesByUser  = async (userId) => {
+    return await Quote.find({ user: userId, isDeleted: false }).sort({ createdAt: -1 });   
+};
+export const dbCreateQuote = async (newQuote) => {
+    return await Quote.create(newQuote);
+};
+export const dbUpdateQuoteById = async (id, updates) => {
+  return await Quote.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+};
