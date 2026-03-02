@@ -1,6 +1,7 @@
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/AppError.js";
-import {dbCreateWork, dbGetPublicWorks, dbGetPublicWorkById, dbUpdateWorkById,dbSoftDeleteWorkById } from '../services/works.service.js';
+import {dbCreateWork, dbGetPublicWorks, dbGetPublicWorkById, dbUpdateWorkById,dbSoftDeleteWorkById, dbGetWorkById } from '../services/works.service.js';
+import { deleteFromCloudinary } from "../services/cloudinar.service.js";
 
 const normalizeCategory = (value) => String(value).toLowerCase().trim();
 
@@ -102,7 +103,11 @@ export const updateWork = catchAsync(async (req, res) => {
 });
 export const deleteWork = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const work = await dbSoftDeleteWorkById(id);
-  if (!work) throw new AppError("Obra no encontrada.", 404);
-  res.status(200).json({ message: "Obra eliminada (soft delete)." });
+  const work = await dbGetWorkById(id);
+  if(!work || work.isDeleted){
+    throw new AppError('Obra no encontrada',404);
+  }
+  await deleteFromCloudinary(work.cover?.publicId);
+  await dbSoftDeleteWorkById(id);
+  res.status(200).json({ message: "Obra eliminada.  ", work: updated });
 });
