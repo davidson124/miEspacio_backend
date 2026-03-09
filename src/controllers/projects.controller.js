@@ -87,9 +87,23 @@ export const createProjectFromQuote = catchAsync(async (req, res) => {
 
 // CLIENTE: mis proyectos
 export const getMyProjects = catchAsync(async (req, res) => {
-  const { id: userId } = req.payload;
-  const projects = await dbGetProjectsByClient(userId);
-  res.json({ projects });
+  // El middleware authenticationUser agrega el payload del JWT
+  const userId = req.payload.id;
+  if (!userId) {
+    throw new AppError("Usuario no autenticado.", 401);
+  }
+  // Traemos datos del arquitecto asociados
+  const projects = await Project.find({
+      client: userId,
+      isDeleted: false
+  })
+  .populate("architect", "name lastName email")
+  .sort({ createdAt: -1 });// Traemos datos del arquitecto asociados
+
+  res.status(200).json({
+    message: "Proyectos del cliente obtenidos correctamente.",
+    projects
+  });
 });
 
 // ARCHITECT: asignados

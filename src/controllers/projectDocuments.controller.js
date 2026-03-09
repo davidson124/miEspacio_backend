@@ -57,12 +57,22 @@ export const getDocumentsByProject = catchAsync(async (req, res) => {
   res.json({ documents: docs });
 });
 
-export const getMyDocuments = catchAsync(async (req, res) => {
-  const { id: userId } = req.payload;
-  const projects = await dbGetProjectsByClient(userId);
+export const getDocumentsForClient = catchAsync(async (req, res) => {
+
+  const userId = req.payload.id;
+  if (!userId) {
+    throw new AppError("Usuario no autenticado.", 401);
+  }
+  // Buscar los proyectos del cliente
+  const projects = await Project.find({
+    client: userId,
+    isDeleted: false
+  }).select("_id");
+  //Convertimos el array de proyectos en un array de ids ejemplo:[{_id:1},{_id:2}] → [1,2]
   const ids = projects.map(p => p._id);
-  const docs = await dbGetDocumentsForClient(ids);
-  res.json({ documents: docs });
+  // Buscar documentos de esos proyectos
+  const documents = await dbGetDocumentsForClient(ids);
+  res.status(200).json({ message: "Documentos obtenidos correctamente.", documents });
 });
 
 export const setDocumentVisibility = catchAsync(async (req, res) => {
