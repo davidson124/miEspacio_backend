@@ -1,4 +1,4 @@
-import AppError from "../utils/appError.js";
+import AppError from "../utils/AppError.js";
 const isAdmin = (req, res, next) => {
     if(!req.payload) {
         return next(new AppError('No autorizado.', 401));

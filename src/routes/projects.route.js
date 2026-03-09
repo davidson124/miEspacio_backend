@@ -14,7 +14,7 @@ router.get("/", getAllProjects); // controller limita a admin
 router.get("/my", authenticationUser, getMyProjects);
 router.get("/:id", getProjectById);
 // ADMIN/ARCHITECT: progreso + galería
-router.patch("/:id/progress", isAdminOrArchitect, updateProjectProgress);
+router.patch("/:id/progress", authenticationUser, updateProjectProgress);
 router.post("/:id/gallery", isAdminOrArchitect, addProjectGalleryImages);
 router.delete("/:id/gallery/:imageIndex", isAdminOrArchitect, removeProjectGalleryImage);
 export default router;

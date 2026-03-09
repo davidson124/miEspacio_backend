@@ -13,7 +13,6 @@ import billingRoutes from './routes/billing.route.js';
 import projectsRoutes from './routes/projects.route.js';
 import serviceRoutes from './routes/services.routes.js';
 import errorHandler from './middlewares/error.middleware.js';
-import projectTypesRoutes from './routes/project-types.route.js';
 import projectDocumentsRoutes from "./routes/projectDocuments.route.js";
 
 const app = express();
@@ -29,7 +28,6 @@ app.use("/api/v1/uploads", uploadRoutes);
 app.use('/api/v1/billing', billingRoutes);
 app.use('/api/v1/services', serviceRoutes);
 app.use("/api/v1/projects", projectsRoutes);
-app.use('/api/v1/project-types', projectTypesRoutes);
 app.use('/api/v1/projecs-documents', projectDocumentsRoutes);
 
 app.use(errorHandler);

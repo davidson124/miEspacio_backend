@@ -147,31 +147,70 @@ export const getProjectById = catchAsync(async (req, res) => {
 
 // ADMIN/ARCHITECT: actualizar fases + progreso general
 export const updateProjectProgress = catchAsync(async (req, res) => {
+  //id del proyecto desde la URL
   const { id } = req.params;
+  //Datos del usuario autenticado
   const { id: userId, role } = req.payload;
 
   if (!["admin", "architect"].includes(role)) throw new AppError("No autorizado.", 403);
-
+  //Buscar proyecto en Mongo
   const project = await Project.findById(id);
   if (!project || project.isDeleted) throw new AppError("Proyecto no encontrado.", 404);
-
+  // Si es arquitecto, solo puede modificar proyectos asignados a él
   if (role === "architect" && project.architect.toString() !== userId) {
-    throw new AppError("No autorizado.", 403);
+    throw new AppError("No autorizado para modificar este proyecto.", 403);
   }
-
   const { phases, progressGeneral } = req.body;
+  // Validar que venga al menos phases o progressGeneral
+  if (!phases && progressGeneral === undefined) {
+    throw new AppError("Debes enviar phases o progressGeneral.", 400);
+  }
+  //Si envían phases: 1. verificamos que sea un array 2. verificamos que cada fase tenga name y progress válidos
 
-  if (phases) project.phases = phases;
+    if (phases) {
+    if (!Array.isArray(phases)) {
+      throw new AppError("phases debe ser un arreglo.", 400);
+    }
 
+    for (const phase of phases) {
+      if (!phase.name || phase.progress === undefined) {
+        throw new AppError("Cada fase debe tener name y progress.", 400);
+      }
+
+      if (phase.progress < 0 || phase.progress > 100) {
+        throw new AppError("El progreso de cada fase debe estar entre 0 y 100.", 400);
+      }
+    }
+
+    // Reemplazamos las fases del proyecto
+    project.phases = phases;
+  }
+  /*
+    Si envían progressGeneral manualmente, lo usamos.
+    Si no lo envían pero sí mandan phases, lo calculamos automáticamente
+    como el promedio del progreso de todas las fases.
+  */
   if (progressGeneral !== undefined) {
+    if (progressGeneral < 0 || progressGeneral > 100) {
+      throw new AppError("progressGeneral debe estar entre 0 y 100.", 400);
+    }
+
     project.progressGeneral = progressGeneral;
   } else if (phases) {
-    const avg = phases.reduce((acc, p) => acc + Number(p.progress || 0), 0) / (phases.length || 1);
-    project.progressGeneral = Math.round(avg);
+    const total = phases.reduce((acc, phase) => acc + Number(phase.progress), 0);
+    const average = total / phases.length;
+
+    // redondeamos a entero
+    project.progressGeneral = Math.round(average);
   }
 
+  // Guardamos cambios
   await project.save();
-  res.json({ message: "Progreso actualizado.", project });
+
+  res.status(200).json({
+    message: "Progreso del proyecto actualizado correctamente.",
+    project
+  });
 });
 
 // ADMIN/ARCHITECT: agregar imagen a galería (ya subida a Cloudinary)
