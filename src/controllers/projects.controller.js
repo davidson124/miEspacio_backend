@@ -4,6 +4,8 @@ import Project from "../models/project.model.js";
 import Quote from "../models/quote.model.js";
 import { dbGetUserById } from "../services/user.service.js";
 import { dbCreateProject, dbGetProjectById, dbGetProjectsByClient, dbGetProjectsByArchitect, dbGetAllProjects } from "../services/project.service.js";
+import { deleteFromCloudinary } from "../services/cloudinar.service.js";
+
 
 // CLIENTE: aceptar propuesta (cambia quote.isAcceptedByClient)
 export const acceptQuote = catchAsync(async (req, res) => {
@@ -195,6 +197,45 @@ export const addProjectGalleryImages = catchAsync(async (req, res) => {
 
   res.status(201).json({
     message: "Imágenes agregadas a la galería.",
+    project
+  });
+});
+
+export const removeProjectGalleryImage = catchAsync(async (req, res) => {
+  const { id, imageIndex } = req.params;
+  const { id: userId, role } = req.payload;
+
+  const project = await Project.findById(id);
+
+  if (!project || project.isDeleted) {
+    throw new AppError("Proyecto no encontrado.", 404);
+  }
+
+  if (role === "architect" && project.architect.toString() !== userId) {
+    throw new AppError("No autorizado.", 403);
+  }
+
+  const index = Number(imageIndex);
+
+  if (Number.isNaN(index) || index < 0 || index >= project.gallery.length) {
+    throw new AppError("Índice de imagen inválido.", 400);
+  }
+
+  const imageToDelete = project.gallery[index];
+
+  if (imageToDelete.publicId) {
+    await deleteFromCloudinary(
+      imageToDelete.publicId,
+      imageToDelete.resourceType || "image"
+    );
+  }
+
+  project.gallery.splice(index, 1);
+
+  await project.save();
+
+  res.status(200).json({
+    message: "Imagen eliminada de la galería.",
     project
   });
 });

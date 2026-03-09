@@ -3,6 +3,7 @@ import catchAsync from "../utils/catchAsync.js";
 import Project from "../models/project.model.js";
 import { dbCreateProjectDocument, dbGetDocumentsByProject, dbGetDocumentsForClient, dbSoftDeleteDocument, dbSetVisibility } from "../services/projectDocument.service.js";
 import { dbGetProjectsByClient } from "../services/project.service.js";
+import { deleteFromCloudinary } from "../services/cloudinar.service.js";
 
 export const createProjectDocument = catchAsync(async (req, res) => {
   const { role, id: userId } = req.payload;
@@ -78,12 +79,28 @@ export const setDocumentVisibility = catchAsync(async (req, res) => {
 });
 
 export const deleteDocument = catchAsync(async (req, res) => {
-  const { role } = req.payload;
-  if (role !== "admin") throw new AppError("Solo admin.", 403);
-
   const { id } = req.params;
-  const doc = await dbSoftDeleteDocument(id);
-  if (!doc) throw new AppError("Documento no encontrado.", 404);
+  const { role } = req.payload;
 
-  res.json({ message: "Documento eliminado.", document: doc });
+  if (role !== "admin") {
+    throw new AppError("Solo admin puede eliminar documentos.", 403);
+  }
+
+  const document = await ProjectDocument.findById(id);
+
+  if (!document || document.isDeleted) {
+    throw new AppError("Documento no encontrado.", 404);
+  }
+
+  if (document.publicId) {
+    await deleteFromCloudinary(document.publicId, "raw");
+  }
+
+  document.isDeleted = true;
+  await document.save();
+
+  res.status(200).json({
+    message: "Documento eliminado correctamente.",
+    document
+  });
 });
