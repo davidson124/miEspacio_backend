@@ -8,15 +8,15 @@ import { set } from 'mongoose';
 
 export const generateQuotePDF = catchAsync(async (req, res) => {
     const {id} = req.params;
-    const quote = await Quote.findById(id);
+    const quote = await Quote.findById(id).populate("user");
     if(!quote) throw new AppError("Cotización no encontrada.", 404);
     //Validar que la cotización esté en estado "propuesta_generada"
-    if(quote.status !== "propuesta_generada"){
-        throw new AppError("La cotización no ha sido generada aún.", 400);
-    }
+    const allowedStatuses = ["propuesta_generada", "aprobada", "contratada"];
+    if (!allowedStatuses.includes(quote.status)) {
+        throw new AppError("La cotización no tiene una propuesta disponible para imprimir.", 400); }
     //Validar que la cotización tenga datos suficientes para generar el PDF
-    if(!quote.status || !Array.isArray(quote.proposalData.items) || quote.proposalData.items.length === 0){
-        throw new AppError("La cotización no tiene datos suficientes para generar el PDF.", 400);
+    if ( !quote.proposalData || !Array.isArray(quote.proposalData.items) || quote.proposalData.items.length === 0) {
+        throw new AppError("La cotización no tiene datos suficientes para generar PDF.", 400);
     }
     //Función para formatear números como moneda
     const money = (n) => {

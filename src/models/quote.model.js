@@ -17,10 +17,14 @@ const quoteSchema = new Schema({
     lastName: {type: String, required: true},
     email: {type: String, required: true}
   },
+  isAcceptedByClient: { type: Boolean, default: false },
+  acceptedAt: { type: Date },
   projectType: {
     type: String,
     required: true
   },
+  project: { type: Schema.Types.ObjectId, ref: "Project" },
+  
   specificService: {
     type: String,
     required: true
@@ -48,7 +52,7 @@ const quoteSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["propuesta_generada","pendiente", "en revision", "aprobada", "rechazada","archivada"],
+    enum: ["propuesta_generada","pendiente", "en revision", "aprobada", "rechazada","contratada"],
     default: "pendiente"
   },
   isDeleted: {
@@ -64,9 +68,9 @@ const quoteSchema = new Schema({
         total:{ type: Number, required: true}
       }
     ],
-    subtotal: { type: Number, required: true},
+    subtotal: { type: Number },
     tax: { type: Number, default: 12 },//Porcentaje de impuesto, por ejemplo 12% IVA
-    total: { type: Number, required: true},
+    total: { type: Number},
     validUntil: { type: Date },
     motes: { type: String }
   },

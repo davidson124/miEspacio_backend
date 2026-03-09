@@ -22,6 +22,4 @@ export{
     dbCreateProjectType,
     dbpatchProjectTypes,
     dbdeleteProjectTypes,
-    
-
 }

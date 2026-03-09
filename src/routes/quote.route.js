@@ -20,6 +20,6 @@ router.get("/", authenticationUser, isAdmin, getAllQuotesAdmin);
 router.patch("/:id", authenticationUser, isAdmin, updateQuoteAdmin);
 router.delete("/:id", authenticationUser, isAdmin, archiveQuoteAdmin);
 router.get("/:id/pdf", authenticationUser, isAdmin, generateQuotePDF);
-router.patch("/:id/proposal", authenticationUser, isAdmin,generateProposal);
+router.patch("/:id/proposal", authenticationUser, isAdmin, generateProposal);
 export default router;
 
