@@ -1,5 +1,5 @@
 /*
-  Devuelve el nombre del servicio en orden de prioridad:
+Devuelve el nombre del servicio en orden de prioridad:
   1. serviceSnapshot.title
   2. specificService
   3. service.title poblado

@@ -35,7 +35,6 @@ export const createService = catchAsync(async (req, res) => {
     title: String(title).trim(),
     description: String(description).trim(),
     features: normalizedFeatures,
-    startingPrice,
     image,
     order
   });

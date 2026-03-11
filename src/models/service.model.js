@@ -1,9 +1,9 @@
 import {Schema, model} from 'mongoose';
 
 const imageSchema = new Schema ({
-    url: { type:String, required:true },
-    thumbUrl: { type: String     },
-    publicId: { type:String }
+    url: { type:String, required:true, trim:true },
+    thumbUrl: { type: String, trim:true },
+    publicId: { type:String, trim:true }
 },{ _id: false });
 
 const serviceSchema= new Schema({
@@ -19,7 +19,7 @@ const serviceSchema= new Schema({
     },
     features:[{
         type: String,
-        required:true
+        trim: true
     }],
     image:{
         type: imageSchema
@@ -35,4 +35,4 @@ const serviceSchema= new Schema({
         index:true
     }
 },{timestamps:true})
-export default model( 'Services', serviceSchema );
+export default model( 'Service', serviceSchema );

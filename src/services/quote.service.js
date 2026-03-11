@@ -1,6 +1,7 @@
 import Quote from "../models/quote.model.js";
 
-export const dbCreateQuote = async (newQuote) => Quote.create(newQuote);
+export const dbCreateQuote = async (newQuote) => { return Quote.create(newQuote);}
+//Obtener cotizaciones, filtro por usuario
 export const dbGetQuotesByUser = async (userId) => {
   return Quote.find({ user: userId, isDeleted: false }).sort({ createdAt: -1 }).populate("service", "title");
 };
