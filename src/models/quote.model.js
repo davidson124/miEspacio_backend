@@ -51,11 +51,6 @@ const quoteSchema = new Schema(
         trim: true
       }
     },
-    //Compatibilidad opcional si alguna prueba vieja aún lo manda
-    specificService: {
-      type: String,
-      trim: true
-    },
     //Datos básicos de la solicitud
     estimatedBudget: {
       type: Number,
