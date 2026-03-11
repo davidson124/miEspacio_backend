@@ -1,80 +1,139 @@
 import { Schema, model } from "mongoose";
 import Counter from "./counter.model.js";
 
-const quoteSchema = new Schema({
-  quoteNumber: {
-    type: Number,
-    unique: true,
-    index: true
+//Items de la propuesta formal que genera admin después.
+const proposalItemSchema = new Schema(
+  {
+    description: { type: String, required: true, trim: true },
+    quantity: { type: Number, required: true, min: 1 },
+    unitPrice: { type: Number, required: true, min: 0 },
+    total: { type: Number, required: true, min: 0 }
   },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-  },
-  clientSnapshot: {
-    name: {type: String, required: true},
-    lastName: {type: String, required: true},
-    email: {type: String, required: true}
-  },
-  isAcceptedByClient: { type: Boolean, default: false },
-  acceptedAt: { type: Date },
-  projectType: {
-    type: String,
-    required: true
-  },
-  project: { type: Schema.Types.ObjectId, ref: "Project" },
-  
-  specificService: {
-    type: String,
-    required: true
-  },
-  estimatedBudget: {
-    type: Number,
-    required: true
-  },
-
-  estimatedTime: {
-    type: String,
-    enum: ["1-3 meses", "3-6 meses", "6-12 meses", "flexible"],
-    required: true
-  },
-  location: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String
-  },
-  preferredContactMethod: {
-    type: String,
-    enum: ["email", "telefono"]
-  },
-  status: {
-    type: String,
-    enum: ["propuesta_generada","pendiente", "en revision", "aprobada", "rechazada","contratada"],
-    default: "pendiente"
-  },
-  isDeleted: {
-    type: Boolean,
-    default: false
-  },
-  proposalData:{
-    items:[
-      {
-        description: { type: String, required: true},
-        quantity: { type: Number, required: true},
-        unitPrice: { type: Number, required: true},
-        total:{ type: Number, required: true}
+  { _id: false }
+);
+const quoteSchema = new Schema(
+  {
+    //Consecutivo interno
+    quoteNumber: {
+      type: Number,
+      unique: true,
+      index: true
+    },
+    //Usuario crea cotización
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+    //Snapshot del cliente al momento de cotizar
+    clientSnapshot: {
+      name: { type: String, required: true, trim: true },
+      lastName: { type: String, required: true, trim: true },
+      email: { type: String, required: true, trim: true }
+    },
+    //Tipo general del proyecto
+    projectType: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    //Referencia al servicio real
+    service: {
+      type: Schema.Types.ObjectId,
+      ref: "Service",
+      required: true
+    },
+    //Snapshot del nombre del servicio al momento de crear la cotización
+    serviceSnapshot: {
+      title: {
+        type: String,
+        required: true,
+        trim: true
       }
-    ],
-    subtotal: { type: Number },
-    tax: { type: Number, default: 12 },//Porcentaje de impuesto, por ejemplo 12% IVA
-    total: { type: Number},
-    validUntil: { type: Date },
-    motes: { type: String }
+    },
+    //Compatibilidad opcional si alguna prueba vieja aún lo manda
+    specificService: {
+      type: String,
+      trim: true
+    },
+    //Datos básicos de la solicitud
+    estimatedBudget: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    estimatedTime: {
+      type: String,
+      enum: ["1-3 meses", "3-6 meses", "6-12 meses", "flexible"],
+      required: true
+    },
+    location: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      trim: true
+    },
+    preferredContactMethod: {
+      type: String,
+      enum: ["email", "telefono"]
+    },
+    //Propuesta formal generada por admin
+    proposalData: {
+      items: {
+        type: [proposalItemSchema],
+        default: []
+      },
+      subtotal: { type: Number, min: 0 },
+      tax: { type: Number, default: 0, min: 0 },
+      total: { type: Number, min: 0 },
+      validUntil: { type: Date },
+      notes: { type: String, trim: true }
+    },
+    //Flujo de negocio
+    status: {
+      type: String,
+      enum: [
+        "pendiente",
+        "en_revision",
+        "propuesta_generada",
+        "aprobada",
+        "contratada",
+        "rechazada",
+        "archivada"
+      ],
+      default: "pendiente"
+    },
+    //Aceptación del cliente
+    isAcceptedByClient: {
+      type: Boolean,
+      default: false
+    },
+    acceptedAt: {
+      type: Date
+    },
+    //Si la cotización genera un proyecto
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: "Project"
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    }
   },
-}, { timestamps: true });
+  { timestamps: true }
+);
+//Virtual para mostrar código 
+quoteSchema.virtual("quoteCode").get(function () {
+  if (this.quoteNumber === undefined || this.quoteNumber === null) return null;
+  return `COT-${String(this.quoteNumber).padStart(5, "0")}`;
+});
+quoteSchema.set("toJSON", { virtuals: true });
+quoteSchema.set("toObject", { virtuals: true });
+//Generar consecutivo automático
 quoteSchema.pre("save", async function () {
   if (!this.isNew) return;
   const counter = await Counter.findOneAndUpdate(
@@ -84,12 +143,4 @@ quoteSchema.pre("save", async function () {
   );
   this.quoteNumber = counter.seq;
 });
-quoteSchema.virtual("quoteCode").get(function () {
-  if (!this.quoteNumber && this.quoteNumber !== 0) return null;
-  //Retornar prefijo COT- de la factura y 5 ceros a la izquierda del número de factura
-  return `COT-${String(this.quoteNumber).padStart(5, "0")}`;
-});
-//Mostrar el campo virtual quoteCode al convertir a JSON o a objeto
-quoteSchema.set("toJSON", { virtuals: true });
-quoteSchema.set("toObject", { virtuals: true });
 export default model("Quote", quoteSchema);

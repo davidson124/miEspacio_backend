@@ -5,64 +5,69 @@ import Quote from "../models/quote.model.js";
 import { dbGetUserById } from "../services/user.service.js";
 import { dbCreateProject, dbGetProjectById, dbGetProjectsByClient, dbGetProjectsByArchitect, dbGetAllProjects } from "../services/project.service.js";
 import { deleteFromCloudinary } from "../services/cloudinar.service.js";
+import getQuoteServiceTitle from "../helpers/getQuoteServiceTitle.js";
 
+/*
+  Admin/Architect: crear proyecto a partir de una cotización aprobada.
 
-// CLIENTE: aceptar propuesta (cambia quote.isAcceptedByClient)
-export const acceptQuote = catchAsync(async (req, res) => {
-  const { id: quoteId } = req.params;
-  const { id: userId } = req.payload;
-
-  const quote = await Quote.findById(quoteId);
-  if (!quote) throw new AppError("Cotización no encontrada.", 404);
-
-  if (quote.user.toString() !== userId) throw new AppError("No autorizado.", 403);
-
-  // opcional: exigir que ya exista propuesta_generada
-  if (quote.status !== "propuesta_generada") {
-    throw new AppError("Aún no hay propuesta para aceptar.", 400);
-  }
-  //Validar si hay campos vacios
-  if (
-    !quote.proposalData ||
-    !Array.isArray(quote.proposalData.items) ||
-    quote.proposalData.items.length === 0
-  ) {
-    throw new AppError("La cotización no tiene una propuesta válida para aceptar.", 400);
-  }
-  // Comprobar propuesta
-  if (quote.isAcceptedByClient) {
-    throw new AppError("La cotización ya fue aceptada.", 400);
-  }
-
-  quote.isAcceptedByClient = true;
-  quote.acceptedAt = new Date();
-  quote.status = "aprobada";
-  await quote.save();
-
-  res.status(200).json({ message: "Propuesta aceptada correctamente.", quote });
-});
-
-// ADMIN/ARCHITECT: crear proyecto desde una quote
+  Reglas:
+  - la cotización debe existir
+  - debe estar aprobada por el cliente
+  - no debe tener proyecto ya creado
+  - el arquitecto debe existir y tener rol architect
+*/
 export const createProjectFromQuote = catchAsync(async (req, res) => {
   const { quoteId } = req.params;
-  const { architectId, title, budget, location, areaM2, startDate, estimatedEndDate, cover } = req.body;
 
-  const quote = await Quote.findById(quoteId).populate("user");
-  if (!quote) throw new AppError("Cotización no encontrada.", 404);
+  const {
+    architectId,
+    title,
+    budget,
+    location,
+    areaM2,
+    startDate,
+    estimatedEndDate,
+    cover
+  } = req.body;
 
-  if (!quote.isAcceptedByClient) throw new AppError("El cliente aún no ha aceptado la propuesta.", 400);
+  const quote = await Quote.findById(quoteId)
+    .populate("user")
+    .populate("service", "title");
 
-  if (quote.project) throw new AppError("Esta cotización ya tiene un proyecto asociado.", 400);
-
-  const architect = await dbGetUserById(architectId);
-  if (!architect || architect.role !== "architect") throw new AppError("Arquitecto no válido.", 400);
-
-  if (!cover?.url || !cover?.thumbUrl) {
-    throw new AppError("La imagen principal del proyecto es obligatoria.", 400);
+  if (!quote) {
+    throw new AppError("Cotización no encontrada.", 404);
   }
 
+  // Debe haber sido aceptada por el cliente
+  if (quote.status !== "aprobada" || !quote.isAcceptedByClient) {
+    throw new AppError("La cotización debe estar aprobada para crear un proyecto.", 400);
+  }
+
+  // Evitar duplicar proyecto
+  if (quote.project) {
+    throw new AppError("Esta cotización ya tiene un proyecto asociado.", 400);
+  }
+
+  // Validar arquitecto
+  const architect = await dbGetUserById(architectId);
+
+  if (!architect || architect.role !== "architect") {
+    throw new AppError("Arquitecto no válido.", 400);
+  }
+
+  // Validar portada
+  if (!cover?.url || !cover?.thumbUrl) {
+    throw new AppError("La portada del proyecto es obligatoria.", 400);
+  }
+
+  const serviceTitle = getQuoteServiceTitle(quote);
+
+  /*
+    Crear proyecto.
+    Si no envías title, generamos uno automáticamente.
+  */
   const project = await dbCreateProject({
-    title: title || `${quote.projectType} - ${quote.location}`,
+    title: title || `${quote.projectType} - ${serviceTitle} - ${quote.location}`,
     client: quote.user._id,
     architect: architect._id,
     relatedQuote: quote._id,
@@ -77,14 +82,20 @@ export const createProjectFromQuote = catchAsync(async (req, res) => {
     cover
   });
 
+  /*
+    Conectar quote -> project
+  */
   quote.project = project._id;
-  quote.status = "contratada"; // trazabilidad de negocio
-  
+  quote.status = "contratada";
+
   await quote.save();
 
-  res.status(201).json({ message: "Proyecto creado desde cotización.", project, quote });
+  res.status(201).json({
+    message: "Proyecto creado correctamente desde la cotización.",
+    project,
+    quote
+  });
 });
-
 // CLIENTE: mis proyectos
 export const getMyProjects = catchAsync(async (req, res) => {
   // El middleware authenticationUser agrega el payload del JWT

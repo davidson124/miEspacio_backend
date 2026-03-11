@@ -1,14 +1,16 @@
 import Quote from "../models/quote.model.js";
 
-export const dbGetAllQuotes = async () =>{
-    return await Quote.find({ isDeleted: false }).sort({ createdAt: -1 });
+export const dbCreateQuote = async (newQuote) => Quote.create(newQuote);
+export const dbGetQuotesByUser = async (userId) => {
+  return Quote.find({ user: userId, isDeleted: false }).sort({ createdAt: -1 }).populate("service", "title");
 };
-export const dbGetQuotesByUser  = async (userId) => {
-    return await Quote.find({ user: userId, isDeleted: false }).sort({ createdAt: -1 });   
+//Obtener cotizaciones, filtro por status
+export const dbGetAllQuotes = async (filter = {}) => {
+  return Quote.find({ isDeleted: false, ...filter }).sort({ createdAt: -1 }).populate("service", "title").populate("user", "name lastName email");
 };
-export const dbCreateQuote = async (newQuote) => {
-    return await Quote.create(newQuote);
+export const dbGetQuoteById = async (id) => {
+  return Quote.findById(id).populate("service", "title").populate("project");
 };
 export const dbUpdateQuoteById = async (id, updates) => {
-  return await Quote.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+  return Quote.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
 };

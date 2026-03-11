@@ -1,13 +1,14 @@
 import { Router } from "express";
-import { createService, deleteService, getAllServices, getServiceById, patchService } from "../controllers/service.controller.js";
+import authenticationUser from "../middlewares/authentication.middleware.js";
+import isAdmin from "../middlewares/authorization.middleware.js";
+import { getPublicServices, getAllServicesAdmin, createService, updateService, toggleServiceStatus, deleteService } from "../controllers/service.controller.js";
+import { get } from "mongoose";
 
 const router=Router()
-
-router.post('/', createService);
-router.get('/', getAllServices);
-router.get('/:serviceId', getServiceById);
-router.delete('/:serviceId', deleteService);
-router.patch('/:serviceId', patchService)
-
-
+router.get('/', getPublicServices);
+router.post('/', authenticationUser, isAdmin, createService);
+router.patch('/:id', authenticationUser, isAdmin, updateService);
+router.delete('/:id', authenticationUser, isAdmin, deleteService);
+router.get('/admin', authenticationUser, isAdmin, getAllServicesAdmin);
+router.patch('/:id/toggle', authenticationUser, isAdmin, toggleServiceStatus);
 export default router

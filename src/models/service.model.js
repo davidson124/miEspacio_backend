@@ -1,39 +1,38 @@
 import {Schema, model} from 'mongoose';
 
+const imageSchema = new Schema ({
+    url: { type:String, required:true },
+    thumbUrl: { type: String     },
+    publicId: { type:String }
+},{ _id: false });
+
 const serviceSchema= new Schema({
-    icon:{
-        type:String,
-        required: true,
-    },
     title:{
         type:String,
         required:true,
-        unique: true
+        trim: true
     },
     description:{
         type: String,
-        required:true
+        required:true, 
+        trim: true
     },
-    features:{
-        type: [String],
+    features:[{
+        type: String,
         required:true
+    }],
+    image:{
+        type: imageSchema
     },
-    price:{
+    order:{
         type:Number,
-        required:true,
         default:0
     },
-    serviceType:{
-        type: String,
-        enum:["Diseño Arquitectonico", "Remodelacion", "Diseño de Interiores", "Gestion de Proyectos", "Consultoria"],
-        default: "Selecciona un servicio",
-        required: true
+    //Permitir ocultar servicios
+    isActive:{
+        type:Boolean,
+        default:true,
+        index:true
     }
 },{timestamps:true})
-
-const serviceModel= model(
-    'services',
-    serviceSchema
-)
-
-export default serviceModel
+export default model( 'Services', serviceSchema );
