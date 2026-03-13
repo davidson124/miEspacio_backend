@@ -1,29 +1,16 @@
-import jwt from 'jsonwebtoken';
-
-const generateToken =( payload )=>{
-
-    const token =  jwt.sign(
-        payload, //carga util
-
-        process.env.JWT_SEED, //semilla (palabra secreta)
-
-        { expiresIn: '1h' } //Opciones de configuracióm
-    )
-
-    return token;
-}
-const verifyToken = ( token )=>{
-    return jwt.verify(
-        token, //token valido
-        process.env.JWT_SEED, //semilla (palabra secreta)
-
-    )
-}
-
-
-
-
-export{
-    generateToken,
-    verifyToken
-}
+import jwt from "jsonwebtoken";
+//Generar token JWT
+export const generateToken = (payload) => {
+  return jwt.sign(
+    payload,
+    process.env.JWT_SECRET, // ← UNIFICAMOS
+    { expiresIn: "1h" }
+  );
+};
+//Verificar token JWT
+export const verifyToken = (token) => {
+  return jwt.verify(
+    token,
+    process.env.JWT_SECRET // ← UNIFICAMOS
+  );
+};
