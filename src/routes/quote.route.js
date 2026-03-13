@@ -9,9 +9,9 @@ router.use(authenticationUser);
 //CLIENTE
 router.post("/", createQuote);
 router.get("/my", getMyQuotes);
-router.get("/:id/pdf", generateQuotePDF);
 router.get("/:id", getQuoteById);
-router.patch("/quotes/:id/accept", acceptQuote);
+router.get("/:id/pdf", generateQuotePDF);
+router.patch("/:id/accept", acceptQuote);
 //ADMIN
 router.get("/", isAdmin, getAllQuotesAdmin);
 router.patch("/:id/proposal", isAdmin, generateProposal);
