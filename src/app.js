@@ -22,7 +22,7 @@ app.use('/api/v1/quotes', quotesRoutes);
 app.use("/api/v1/uploads", uploadRoutes);
 app.use('/api/v1/services', serviceRoutes);
 app.use("/api/v1/projects", projectsRoutes);
-app.use('/api/v1/projecs-documents', projectDocumentsRoutes);
+app.use('/api/v1/projects-documents', projectDocumentsRoutes);
 
 app.use(errorHandler);
 
