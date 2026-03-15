@@ -19,7 +19,6 @@ describe("GET /api/v1/project-documents/my", () => {
       role: "user",
       isActive: true
     });
-
     const otherUser = await User.create({
       name: "Juan",
       lastName: "Pérez",
@@ -29,7 +28,6 @@ describe("GET /api/v1/project-documents/my", () => {
       role: "user",
       isActive: true
     });
-
     const architect = await User.create({
       name: "Carlos",
       lastName: "Arquitecto",
@@ -39,14 +37,12 @@ describe("GET /api/v1/project-documents/my", () => {
       role: "architect",
       isActive: true
     });
-
     const service = await Service.create({
       title: "Diseño Residencial",
       description: "Servicio activo",
       features: ["Casas"],
       isActive: true
     });
-
     const quote = await Quote.create({
       user: user._id,
       clientSnapshot: {
@@ -65,7 +61,6 @@ describe("GET /api/v1/project-documents/my", () => {
       status: "aprobada",
       isAcceptedByClient: true
     });
-
     const project = await Project.create({
       title: "Proyecto Casa Moderna",
       client: user._id,
@@ -84,7 +79,6 @@ describe("GET /api/v1/project-documents/my", () => {
       },
       phases: []
     });
-
     const otherQuote = await Quote.create({
       user: otherUser._id,
       clientSnapshot: {
@@ -103,7 +97,6 @@ describe("GET /api/v1/project-documents/my", () => {
       status: "aprobada",
       isAcceptedByClient: true
     });
-
     const otherProject = await Project.create({
       title: "Proyecto Ajeno",
       client: otherUser._id,
@@ -122,7 +115,6 @@ describe("GET /api/v1/project-documents/my", () => {
       },
       phases: []
     });
-
     // Documento visible del usuario autenticado
     await ProjectDocument.create({
       project: project._id,
@@ -133,7 +125,6 @@ describe("GET /api/v1/project-documents/my", () => {
       uploadedBy: architect._id,
       isVisibleToClient: true
     });
-
     // Documento oculto del usuario autenticado (no debe aparecer)
     await ProjectDocument.create({
       project: project._id,
@@ -144,7 +135,6 @@ describe("GET /api/v1/project-documents/my", () => {
       uploadedBy: architect._id,
       isVisibleToClient: false
     });
-
     // Documento visible pero de otro usuario (no debe aparecer)
     await ProjectDocument.create({
       project: otherProject._id,
@@ -155,16 +145,13 @@ describe("GET /api/v1/project-documents/my", () => {
       uploadedBy: architect._id,
       isVisibleToClient: true
     });
-
     const token = jwt.sign(
       { id: user._id.toString(), role: user.role },
       process.env.JWT_SECRET
     );
-
     const res = await request(app)
       .get("/api/v1/projects-documents/my")
       .set("Authorization", `Bearer ${token}`);
-
     expect(res.statusCode).toBe(200);
     expect(res.body.documents).toHaveLength(1);
     expect(res.body.documents[0].title).toBe("Plano arquitectónico");
