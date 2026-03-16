@@ -8,7 +8,7 @@ import Quote from "../../src/models/quote.model.js";
 import Project from "../../src/models/project.model.js";
 import ProjectDocument from "../../src/models/projectDocument.model.js";
 
-describe("GET /api/v1/project-documents/my", () => {
+describe("GET /api/v1/projects-documents/my", () => {
   it("debe devolver solo los documentos visibles de los proyectos del usuario autenticado", async () => {
     const user = await User.create({
       name: "David",
@@ -157,4 +157,35 @@ describe("GET /api/v1/project-documents/my", () => {
     expect(res.body.documents[0].title).toBe("Plano arquitectónico");
     expect(res.body.documents[0].isVisibleToClient).toBe(true);
   });
+  it("debe responder 401 si no se envía token", async () => {
+  const res = await request(app).get("/api/v1/projects-documents/my");
+
+  expect(res.statusCode).toBe(401);
+  expect(res.body.message).toBe("Token requerido");
+});
+it("debe devolver 200 y un arreglo vacío si el usuario no tiene proyectos", async () => {
+  const user = await User.create({
+    name: "Laura",
+    lastName: "SinProyecto",
+    email: "sinproyecto@test.com",
+    password: "hashedPassword",
+    cellphoneNumber: "3004444444",
+    role: "user",
+    isActive: true
+  });
+
+  const token = jwt.sign(
+    { id: user._id.toString(), role: user.role },
+    process.env.JWT_SECRET
+  );
+
+  const res = await request(app)
+    .get("/api/v1/projects-documents/my")
+    .set("Authorization", `Bearer ${token}`);
+
+  expect(res.statusCode).toBe(200);
+  expect(res.body.message).toBe("Documentos obtenidos correctamente.");
+  expect(Array.isArray(res.body.documents)).toBe(true);
+  expect(res.body.documents).toHaveLength(0);
+});
 });

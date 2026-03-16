@@ -1,4 +1,3 @@
-import workModel from '../models/work.model.js';
 import Work from '../models/work.model.js';
 export const dbCreateWork = async (newWork) => Work.create(newWork);
 

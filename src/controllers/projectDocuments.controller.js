@@ -1,6 +1,7 @@
 import AppError from "../utils/AppError.js";
 import catchAsync from "../utils/catchAsync.js";
 import Project from "../models/project.model.js";
+import projectDocument from "../models/projectDocument.model.js";
 import { dbCreateProjectDocument, dbGetDocumentsByProject, dbGetDocumentsForClient, dbSoftDeleteDocument, dbSetVisibility } from "../services/projectDocument.service.js";
 import { dbGetProjectsByClient } from "../services/project.service.js";
 import { deleteFromCloudinary } from "../services/cloudinar.service.js";

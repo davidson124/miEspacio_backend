@@ -7,7 +7,7 @@ const router = Router();
 router.use(authenticationUser);
 router.delete("/:id", deleteDocument); // solo admin 
 router.get("/", getDocumentsByProject);
+router.get("/my", getDocumentsForClient);
 router.patch("/:id/visibility", setDocumentVisibility); //Solo admin
 router.post("/", isAdminOrArchitect, createProjectDocument);
-router.get("/my", getDocumentsForClient, getDocumentsForClient);
 export default router;
