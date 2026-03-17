@@ -149,4 +149,13 @@ describe("DELETE /api/v1/projects-documents/:id", () => {
     expect(res.statusCode).toBe(404);
     expect(res.body.message).toBe("Documento no encontrado.");
   });
+  it("debe responder 401 si no se envía token", async () => {
+  const { document } = await createBaseData();
+
+  const res = await request(app)
+    .delete(`/api/v1/projects-documents/${document._id}`);
+
+  expect(res.statusCode).toBe(401);
+  expect(res.body.message).toBe("Token requerido");
+});
 });
