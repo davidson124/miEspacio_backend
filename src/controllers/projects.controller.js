@@ -7,15 +7,6 @@ import { dbCreateProject, dbGetProjectById, dbGetProjectsByClient, dbGetProjects
 import { deleteFromCloudinary } from "../services/cloudinar.service.js";
 import getQuoteServiceTitle from "../helpers/getQuoteServiceTitle.js";
 
-/*
-  Admin/Architect: crear proyecto a partir de una cotización aprobada.
-
-  Reglas:
-  - la cotización debe existir
-  - debe estar aprobada por el cliente
-  - no debe tener proyecto ya creado
-  - el arquitecto debe existir y tener rol architect
-*/
 export const createProjectFromQuote = catchAsync(async (req, res) => {
   const { quoteId } = req.params;
 
@@ -62,10 +53,7 @@ export const createProjectFromQuote = catchAsync(async (req, res) => {
 
   const serviceTitle = getQuoteServiceTitle(quote);
 
-  /*
-    Crear proyecto.
-    Si no envías title, generamos uno automáticamente.
-  */
+  //Crear proyecto.
   const project = await dbCreateProject({
     title: title || `${quote.projectType} - ${serviceTitle} - ${quote.location}`,
     client: quote.user._id,
