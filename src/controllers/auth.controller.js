@@ -56,3 +56,14 @@ export const renewToken = catchAsync(async (req, res) => {
         token
     });
 });
+export const getMe = catchAsync(async (req, res) => {
+    const { id } = req.payload;
+    const userFound = await dbGetUserById(id);
+    if (!userFound || !userFound.isActive) {
+      throw new AppError("Usuario no encontrado.", 404);
+    }
+    const userObject = userFound.toObject();
+    delete userObject.password;
+    return res.status(200).json({ message: "Perfil obtenido correctamente.", user: userObject
+    });
+});
