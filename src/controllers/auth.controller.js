@@ -5,15 +5,11 @@ import { generateToken } from "../helpers/jwt.heplper.js";
 import { dbGetUserByEmailWithPassword, dbGetUserById } from "../services/user.service.js";
 export const loginUser= catchAsync(async (req,res)=>{
         const { email, password } = req.body;
-        //Paso 1: Verificar si el usuario no existe
+        //Paso 1: Verificar si el usuario no existe o Verificar si el usuario esta activo
         const userFound = await dbGetUserByEmailWithPassword(email);
-        if(!userFound){
+        if(!userFound || !userFound.isActive){
             throw new AppError('Credenciales invalidas, intente nuevamente', 401);
             }
-        // Verificar si el usuario esta activo
-        if(!userFound.isActive){
-            throw new AppError('Credenciales invalidas, intente nuevamente', 403);
-        }
         //Paso 2: Verificar si la contraseña coincide 
         const isMatch = await verifyEncriptedPassword(password, userFound.password);
         if(!isMatch){
@@ -27,11 +23,7 @@ export const loginUser= catchAsync(async (req,res)=>{
         const userObject = userFound.toObject();
         //Paso 4: Eliminar propiedades con datos sensibles 
         delete userObject.password;
-        res.json({ user: userObject, token });
-        res.status(200).json({
-            message: 'Bienvenido',
-            user: userObject,
-            token
+        res.status(200).json({ message: 'Bienvenido', user: userObject, token
         })
 });
 export const renewToken = catchAsync(async (req, res) => {

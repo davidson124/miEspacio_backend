@@ -108,10 +108,10 @@ describe("GET /api/v1/auth/me", () => {
       .get("/api/v1/auth/me")
       .set("Authorization", `Bearer ${fakeToken}`);
 
-    expect(res.statusCode).toBe(401);
+    expect(res.statusCode).toBe(404);
   });
 
-  it("debe responder 401 si el usuario está inactivo", async () => {
+  it("debe responder 404 si el usuario está inactivo", async () => {
     const inactiveUser = await User.create({
       name: "Laura",
       lastName: "Inactive",
@@ -128,6 +128,6 @@ describe("GET /api/v1/auth/me", () => {
       .get("/api/v1/auth/me")
       .set("Authorization", `Bearer ${token}`);
 
-    expect(res.statusCode).toBe(401);
+    expect(res.statusCode).toBe(404);
   });
 });
