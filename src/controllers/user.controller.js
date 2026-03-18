@@ -2,7 +2,7 @@ import { encryptedPassword } from "../helpers/bcrypt.helper.js";
 import { dbDeleteUserById, dbGetUserById, dbGetAllUsers, dbGetUserByEmail, dbUpdateUserById,dbRegisterUser } from "../services/user.service.js";
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/AppError.js';
-const createUser = catchAsync(async (req, res) => {
+export const createUser = catchAsync(async (req, res) => {
         const { name, lastName, email, password, telephone, cellphoneNumber, urlimage } = req.body;
         if (!name || !lastName || !email || !password) {
             throw new AppError("Faltan datos obligatorios.", 400);
@@ -37,7 +37,7 @@ const createUser = catchAsync(async (req, res) => {
             user: jsonUser
         });
     });
-const createArchitect = catchAsync(async (req, res) => {
+export const createArchitect = catchAsync(async (req, res) => {
         const { name, lastName, email, password, telephone, cellphoneNumber, urlimage } = req.body;
         if (!name || !lastName || !email || !password) {
             throw new AppError("Faltan datos obligatorios.", 400);
@@ -66,11 +66,11 @@ const createArchitect = catchAsync(async (req, res) => {
             user: jsonUser
         });
 });
-const getAllUsers = catchAsync(async (req, res) => {
+export const getAllUsers = catchAsync(async (req, res) => {
         const users = await dbGetAllUsers();
         res.status(200).json({ message: 'Usuarios obtenidos correctamente.', users });
 });
-const getUserById = catchAsync(async (req, res) => {
+export const getUserById = catchAsync(async (req, res) => {
         const { id } = req.params;
         const userFound = await dbGetUserById(id);
         if(!userFound) {
@@ -81,7 +81,7 @@ const getUserById = catchAsync(async (req, res) => {
             user: userFound
         });
 });
-const deleteUserById = catchAsync(async (req, res) => {
+export const deleteUserById = catchAsync(async (req, res) => {
         const {id} = req.params;
         const userDelete = await dbDeleteUserById(id);
         if(!userDelete) {
@@ -89,7 +89,7 @@ const deleteUserById = catchAsync(async (req, res) => {
         }
         res.status(200).json({ message: 'Usuario eliminado correctamente.' });
 });
-const updateUserById = catchAsync(async (req, res) => {
+export const updateUserById = catchAsync(async (req, res) => {
         const { id } = req.params;
         const allowedFields = ['name', 'lastName', 'email', 'password', 'telephone', 'cellphoneNumber', 'urlimage'];
         const updates = {};
@@ -122,5 +122,3 @@ const updateUserById = catchAsync(async (req, res) => {
             user: jsonUser
         });
 });
-export { createArchitect, createUser, getAllUsers, getUserById, deleteUserById, updateUserById };
-

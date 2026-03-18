@@ -5,7 +5,7 @@ import { getPublicServices, getAllServicesAdmin, createService, updateService, t
 
 const router=Router()
 //público
-router.get('/', getPublicServices);
+router.get('/public', getPublicServices);
 //Admin
 router.get('/admin', authenticationUser, isAdmin, getAllServicesAdmin);
 router.post('/', authenticationUser, isAdmin, createService);
